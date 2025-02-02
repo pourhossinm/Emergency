@@ -1,13 +1,28 @@
 from flask import Flask, render_template, request
+from flask_socketio import SocketIO, emit
+import eventlet
+import os
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
-def home():
-    if request.method == "POST":
-        name = request.form["name"]
-    return render_template("form.html")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@socketio.on('offer')
+def handle_offer(data):
+    emit('offer', data, broadcast=True)
+
+@socketio.on('answer')
+def handle_answer(data):
+    emit('answer', data, broadcast=True)
+
+@socketio.on('candidate')
+def handle_candidate(data):
+    emit('candidate', data, broadcast=True)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # مقدار پیش‌فرض 5000 است، اگر PORT موجود نباشد
+    socketio.run(app, debug=True)
