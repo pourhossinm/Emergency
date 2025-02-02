@@ -26,6 +26,6 @@ def handle_candidate(data):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # مقدار پیش‌فرض 5000 است، اگر PORT موجود نباشد
     socketio.run(app, debug=True)
-    app.run(host='0.0.0.0', port=port)
+    # app.run(host='0.0.0.0', port=port)
     # app.run(debug=True)
 
