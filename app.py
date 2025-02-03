@@ -19,14 +19,6 @@ def on_join(data):
     join_room(room)
     emit('message', {'message': f'{username} has entered the room.'}, room=room)
 
-@socketio.on('leave')
-def on_leave(data):
-    username = data['username']
-    room = data['room']
-    leave_room(room)
-    del clients[username]
-    emit('message', {'message': f'{username} has left the room.'}, room=room)
-
 @socketio.on('offer')
 def handle_offer(data):
     emit('offer', data, room=data['room'])
@@ -40,6 +32,5 @@ def handle_candidate(data):
     emit('candidate', data, room=data['room'])
 
 if __name__ == '__main__':
-    # تغییر پورت به پورت سیستم عامل
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.environ.get("PORT", 10000))  # تغییر به پورت 10000
     socketio.run(app, host='0.0.0.0', port=port)
