@@ -13,14 +13,17 @@ def index():
 
 @socketio.on("join")
 def handle_join():
-    sid = request.sid
-    users.append(sid)
+    try:
+        sid = request.sid
+        users.append(sid)
 
-    print(f"User {sid} joined. Total users: {len(users)}")
+        print(f"User {sid} joined. Total users: {len(users)}")  # مشاهده لاگ دقیق
 
-    if len(users) == 2:  # اگر دو نفر وصل شدند، ارتباط را شروع کن
-        emit("start_call", {"peer": users[1]}, room=users[0])
-        emit("start_call", {"peer": users[0]}, room=users[1])
+        if len(users) == 2:
+            emit("start_call", {"peer": users[1]}, room=users[0])
+            emit("start_call", {"peer": users[0]}, room=users[1])
+    except Exception as e:
+        print(f"Error in join event: {e}")  # چاپ خطای دقیق
 
 @socketio.on("offer")
 def handle_offer(data):
