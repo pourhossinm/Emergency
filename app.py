@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 import os
+import eventlet
 
 app = Flask(__name__)
 
-
-socketio = SocketIO(app, cors_allowed_origins="*")
+# فعال کردن CORS برای سایت شما
+socketio = SocketIO(app, cors_allowed_origins=["https://yourdomain.com"])
 
 @app.route("/")
 def index():
@@ -24,8 +25,5 @@ def handle_candidate(data):
     emit('candidate', data, broadcast=True)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))  # مقدار پیش‌فرض 5000 است، اگر PORT موجود نباشد
-    socketio.run(app, debug=True, port=port, allow_unsafe_werkzeug=True)
-    # app.run(host='0.0.0.0', port=port)
-    # app.run(debug=True)
-
+    port = int(os.environ.get("PORT", 8080))  # Render به طور خودکار PORT را تنظیم می‌کند
+    socketio.run(app, host="0.0.0.0", port=port)  # بدون debug=True
