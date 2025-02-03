@@ -35,5 +35,5 @@ def handle_candidate(data):
     emit('candidate', data, room=room)  # ارسال candidate به اتاق مورد نظر
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 8080))  # تنظیم پورت مناسب
+    port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
     socketio.run(app, host='0.0.0.0', port=port)
