@@ -1,92 +1,28 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Video Conference</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <h1>Video Call</h1>-->
-<!--    <video id="localVideo" autoplay playsinline></video>-->
-<!--    <video id="remoteVideo" autoplay playsinline></video>-->
-
-<!--    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>-->
-<!--    <script>-->
-<!--        const socket = io();-->
-<!--        const localVideo = document.getElementById('localVideo');-->
-<!--        const remoteVideo = document.getElementById('remoteVideo');-->
-<!--        let localStream;-->
-<!--        let peerConnection;-->
-<!--        const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };-->
-
-<!--        async function start() {-->
-<!--            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });-->
-<!--            localVideo.srcObject = localStream;-->
-<!--            socket.emit("join");  // اعلام حضور به سرور-->
-<!--        }-->
-
-<!--        socket.on("start_call", async () => {-->
-<!--            peerConnection = new RTCPeerConnection(config);-->
-<!--            peerConnection.ontrack = (event) => { remoteVideo.srcObject = event.streams[0]; };-->
-<!--            peerConnection.onicecandidate = (event) => { if (event.candidate) socket.emit("candidate", event.candidate); };-->
-<!--            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));-->
-
-<!--            const offer = await peerConnection.createOffer();-->
-<!--            await peerConnection.setLocalDescription(offer);-->
-<!--            socket.emit("offer", offer);-->
-<!--        });-->
-
-<!--        socket.on("offer", async (offer) => {-->
-<!--            if (!peerConnection) {-->
-<!--                peerConnection = new RTCPeerConnection(config);-->
-<!--                peerConnection.ontrack = (event) => { remoteVideo.srcObject = event.streams[0]; };-->
-<!--                peerConnection.onicecandidate = (event) => { if (event.candidate) socket.emit("candidate", event.candidate); };-->
-<!--                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));-->
-<!--            }-->
-<!--            await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));-->
-<!--            const answer = await peerConnection.createAnswer();-->
-<!--            await peerConnection.setLocalDescription(answer);-->
-<!--            socket.emit("answer", answer);-->
-<!--        });-->
-
-<!--        socket.on("answer", async (answer) => {-->
-<!--            await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));-->
-<!--        });-->
-
-<!--        socket.on("candidate", async (candidate) => {-->
-<!--            if (peerConnection) {-->
-<!--                await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));-->
-<!--            }-->
-<!--        });-->
-
-<!--        start();-->
-<!--    </script>-->
-<!--</body>-->
-<!--</html>-->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebRTC Video Chat</title>
+    <title>WebRTC Group Chat</title>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body>
-    <h1>WebRTC Audio and Video Chat</h1>
+    <h1>WebRTC Group Audio and Video Chat</h1>
     <video id="localVideo" autoplay muted></video>
-    <video id="remoteVideo" autoplay></video>
+    <div id="remoteVideos"></div>
+    <button onclick="joinRoom()">Join Room</button>
+    <button onclick="leaveRoom()">Leave Room</button>
 
     <script>
         const socket = io.connect('http://' + document.domain + ':' + location.port);
         let localStream;
-        let peerConnection;
+        let peerConnections = {};
+        const room = "room1";  // برای تست می‌توان یک اتاق پیش‌فرض گذاشت
         const config = {
             iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
         };
 
-        // Get local media stream
+        // راه‌اندازی ویدیوی محلی
         async function getLocalStream() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -97,55 +33,85 @@
             }
         }
 
-        // Create a peer connection
-        function createPeerConnection() {
-            peerConnection = new RTCPeerConnection(config);
-            peerConnection.addEventListener('icecandidate', handleIceCandidate);
-            peerConnection.addEventListener('track', handleTrackEvent);
+        // ایجاد Peer Connection برای هر کلاینت
+        function createPeerConnection(username) {
+            const peerConnection = new RTCPeerConnection(config);
+            peerConnection.addEventListener('icecandidate', (event) => handleIceCandidate(event, username));
+            peerConnection.addEventListener('track', (event) => handleTrackEvent(event, username));
 
-            // Add local stream tracks to peer connection
+            // افزودن جریان محلی
             localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+            peerConnections[username] = peerConnection;
+            return peerConnection;
         }
 
-        // Handle ICE candidate event
-        function handleIceCandidate(event) {
+        // مدیریت ICE candidates
+        function handleIceCandidate(event, username) {
             if (event.candidate) {
-                socket.emit('message', { type: 'candidate', candidate: event.candidate });
+                socket.emit('candidate', { candidate: event.candidate, room: room, username: username });
             }
         }
 
-        // Handle incoming remote track
-        function handleTrackEvent(event) {
-            const remoteStream = event.streams[0];
-            document.getElementById('remoteVideo').srcObject = remoteStream;
+        // دریافت جریان‌های راه دور
+        function handleTrackEvent(event, username) {
+            let remoteVideo = document.getElementById(username);
+            if (!remoteVideo) {
+                remoteVideo = document.createElement('video');
+                remoteVideo.id = username;
+                remoteVideo.autoplay = true;
+                document.getElementById('remoteVideos').appendChild(remoteVideo);
+            }
+            remoteVideo.srcObject = event.streams[0];
         }
 
-        // Create an offer
-        async function createOffer() {
-            createPeerConnection();
+        // ارسال offer به سرور
+        async function createOffer(username) {
+            const peerConnection = createPeerConnection(username);
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
-            socket.emit('message', { type: 'offer', offer: offer });
+            socket.emit('offer', { offer: offer, room: room, username: username });
         }
 
-        // Handle incoming messages from Socket.IO
-        socket.on('message', async (message) => {
-            if (message.type === 'offer') {
-                createPeerConnection();
-                await peerConnection.setRemoteDescription(new RTCSessionDescription(message.offer));
-                const answer = await peerConnection.createAnswer();
-                await peerConnection.setLocalDescription(answer);
-                socket.emit('message', { type: 'answer', answer: answer });
-            } else if (message.type === 'answer') {
-                await peerConnection.setRemoteDescription(new RTCSessionDescription(message.answer));
-            } else if (message.type === 'candidate') {
-                await peerConnection.addIceCandidate(new RTCIceCandidate(message.candidate));
-            }
+        // ایجاد پاسخ
+        async function createAnswer(offer, username) {
+            const peerConnection = createPeerConnection(username);
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            socket.emit('answer', { answer: answer, room: room, username: username });
+        }
+
+        // پیوستن به اتاق
+        function joinRoom() {
+            socket.emit('join', { username: 'User1', room: room });
+            getLocalStream().then(() => {
+                // برای هر کلاینت موجود در اتاق پیشنهاد ارسال کن
+                socket.emit('message', { message: 'New user joined' });
+                createOffer('User1');
+            });
+        }
+
+        // ترک اتاق
+        function leaveRoom() {
+            socket.emit('leave', { username: 'User1', room: room });
+            peerConnections = {};  // بستن تمام ارتباطات
+            document.getElementById('remoteVideos').innerHTML = '';  // پاک کردن ویدیوهای راه دور
+        }
+
+        // دریافت پیشنهاد، پاسخ و نامزد از سرور
+        socket.on('offer', async (data) => {
+            await createAnswer(data.offer, data.username);
         });
 
-        // Start the video chat
-        getLocalStream().then(() => {
-            createOffer();
+        socket.on('answer', (data) => {
+            const peerConnection = peerConnections[data.username];
+            peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+        });
+
+        socket.on('candidate', (data) => {
+            const peerConnection = peerConnections[data.username];
+            peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
         });
     </script>
 </body>
