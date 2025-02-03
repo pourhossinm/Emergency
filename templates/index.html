@@ -8,7 +8,6 @@
 </head>
 <body>
     <h2>Video Chat</h2>
-
     <div>
         <video id="localVideo" autoplay muted></video>
         <video id="remoteVideo" autoplay></video>
@@ -64,33 +63,4 @@
                 });
 
                 socket.on('candidate', (data) => {
-                    peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
-                });
-
-                // ایجاد پیشنهاد (offer)
-                peerConnection = new RTCPeerConnection(configuration);
-                localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-                peerConnection.onicecandidate = (event) => {
-                    if (event.candidate) {
-                        socket.emit('candidate', { candidate: event.candidate, room: room });
-                    }
-                };
-
-                peerConnection.ontrack = (event) => {
-                    remoteVideo.srcObject = event.streams[0];
-                };
-
-                const offer = await peerConnection.createOffer();
-                await peerConnection.setLocalDescription(offer);
-                socket.emit('offer', { offer: offer, room: room });
-
-            } catch (err) {
-                console.error('Error accessing media devices.', err);
-            }
-        }
-
-        start();
-    </script>
-</body>
-</html>
+                    peerConnection.addIceCandidate(new RTCIceCandidat

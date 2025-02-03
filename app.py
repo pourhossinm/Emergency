@@ -5,7 +5,7 @@ import os
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-clients = {}
+clients = {}  # ذخیره کلاینت‌ها بر اساس اتاق
 
 @app.route('/')
 def index():
@@ -15,22 +15,25 @@ def index():
 def on_join(data):
     username = data['username']
     room = data['room']
-    clients[username] = room
+    clients[username] = room  # ذخیره نام کاربر به همراه اتاقی که در آن حضور دارد
     join_room(room)
     emit('message', {'message': f'{username} has entered the room.'}, room=room)
 
 @socketio.on('offer')
 def handle_offer(data):
-    emit('offer', data, room=data['room'])
+    room = data['room']
+    emit('offer', data, room=room)  # ارسال پیشنهاد به اتاق مورد نظر
 
 @socketio.on('answer')
 def handle_answer(data):
-    emit('answer', data, room=data['room'])
+    room = data['room']
+    emit('answer', data, room=room)  # ارسال پاسخ به اتاق مورد نظر
 
 @socketio.on('candidate')
 def handle_candidate(data):
-    emit('candidate', data, room=data['room'])
+    room = data['room']
+    emit('candidate', data, room=room)  # ارسال candidate به اتاق مورد نظر
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))  # تغییر به پورت 10000
+    port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
     socketio.run(app, host='0.0.0.0', port=port)
