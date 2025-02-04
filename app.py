@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO, emit, join_room, leave_room
+import os
 
 # Next two lines are for the issue: https://github.com/miguelgrinberg/python-engineio/issues/142
 from engineio.payload import Payload
@@ -109,5 +110,7 @@ def on_data(data):
     socketio.emit('data', data, room=target_sid)
 
 
-if __name__ == "__main__":
-    socketio.run(app, debug=True)
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
+    socketio.run(app, host='0.0.0.0', port=port)
