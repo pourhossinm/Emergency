@@ -29,6 +29,8 @@ def index():
 def enter_room(room_id):
     if room_id not in session:
         return redirect(url_for("entry_checkpoint", room_id=room_id))
+    else:
+        print(45)
     return render_template("chatroom.html", room_id=room_id, display_name=session[room_id]["name"], mute_audio=session[room_id]["mute_audio"], mute_video=session[room_id]["mute_video"])
 
 @app.route("/room/<string:room_id>/checkpoint/", methods=["GET", "POST"])
@@ -110,3 +112,4 @@ def on_data(data):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
     socketio.run(app, host='0.0.0.0', port=port)
+    # socketio.run(app, debug=True)
