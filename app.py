@@ -29,19 +29,23 @@ def index():
 def enter_room(room_id):
     if room_id not in session:
         return redirect(url_for("entry_checkpoint", room_id=room_id))
+        print(33)
     else:
         print(45)
     return render_template("chatroom.html", room_id=room_id, display_name=session[room_id]["name"], mute_audio=session[room_id]["mute_audio"], mute_video=session[room_id]["mute_video"])
 
 @app.route("/room/<string:room_id>/checkpoint/", methods=["GET", "POST"])
 def entry_checkpoint(room_id):
+    print(request.method)
     if request.method == "POST":
         display_name = request.form['display_name']
         mute_audio = request.form['mute_audio']
         mute_video = request.form['mute_video']
         session[room_id] = {"name": display_name, "mute_audio":mute_audio, "mute_video":mute_video}
+        print(url_for("enter_room", room_id=room_id))
         return redirect(url_for("enter_room", room_id=room_id))
 
+    print(f"chatroom_checkpoint.html   {room_id}")
     return render_template("chatroom_checkpoint.html", room_id=room_id)
     
 
@@ -54,6 +58,7 @@ def on_connect():
 
 @socketio.on("join-room")
 def on_join_room(data):
+    print(43)
     sid = request.sid
     room_id = data["room_id"]
     display_name = session[room_id]["name"]
