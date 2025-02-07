@@ -29,10 +29,8 @@ def index():
 def enter_room(room_id):
     if room_id not in session:
         return redirect(url_for("entry_checkpoint", room_id=room_id))
-        print(33)
-    else:
-        print(45)
     return render_template("chatroom.html", room_id=room_id, display_name=session[room_id]["name"], mute_audio=session[room_id]["mute_audio"], mute_video=session[room_id]["mute_video"])
+
 
 @app.route("/room/<string:room_id>/checkpoint/", methods=["GET", "POST"])
 def entry_checkpoint(room_id):
@@ -42,19 +40,19 @@ def entry_checkpoint(room_id):
         mute_audio = request.form['mute_audio']
         mute_video = request.form['mute_video']
         session[room_id] = {"name": display_name, "mute_audio":mute_audio, "mute_video":mute_video}
-        print(url_for("enter_room", room_id=room_id))
+        print(session[room_id])
         return redirect(url_for("enter_room", room_id=room_id))
 
     print(f"chatroom_checkpoint.html   {room_id}")
     return render_template("chatroom_checkpoint.html", room_id=room_id)
-    
+
 
 
 @socketio.on("connect")
 def on_connect():
     sid = request.sid
     print("New socket connected ", sid)
-    
+
 
 @socketio.on("join-room")
 def on_join_room(data):
@@ -62,16 +60,16 @@ def on_join_room(data):
     sid = request.sid
     room_id = data["room_id"]
     display_name = session[room_id]["name"]
-    
+
     # register sid to the room
     join_room(room_id)
     _room_of_sid[sid] = room_id
     _name_of_sid[sid] = display_name
-    
+
     # broadcast to others in the room
     print("[{}] New member joined: {}<{}>".format(room_id, display_name, sid))
     emit("user-connect", {"sid": sid, "name": display_name}, broadcast=True, include_self=False, room=room_id)
-    
+
     # add to user list maintained on server
     if room_id not in _users_in_room:
         _users_in_room[room_id] = [sid]
