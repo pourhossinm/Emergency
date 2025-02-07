@@ -4,6 +4,7 @@ var _peer_list = {};
 // socketio 
 var protocol = window.location.protocol;
 var socket = io(protocol + '//' + document.domain + ':' + location.port, {autoConnect: false});
+alert(protocol + '//' + document.domain + ':' + location.port)
 
 document.addEventListener("DOMContentLoaded", (event)=>{
     startCamera();
@@ -26,6 +27,7 @@ function startCamera()
         setAudioMuteState(audioMuted);                
         setVideoMuteState(videoMuted);
         //start the socketio connection
+
         socket.connect();
     })
     .catch((e)=>{
