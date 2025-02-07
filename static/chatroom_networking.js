@@ -89,7 +89,6 @@ function log_user_list()
     for(let key in _peer_list)
     {
         console.log(`${key}: ${_peer_list[key]}`);
-        alert(key)
     }
 }
 
@@ -132,7 +131,6 @@ function start_webrtc()
     for(let peer_id in _peer_list)
     {
         invite(peer_id);
-        alert(peer_id);
     }
 }
 
@@ -152,7 +150,6 @@ function invite(peer_id)
 
 function createPeerConnection(peer_id)
 {
-    alert("mahdi")
 
     _peer_list[peer_id] = new RTCPeerConnection(PC_CONFIG);
 
@@ -164,7 +161,6 @@ function createPeerConnection(peer_id)
 
 function handleNegotiationNeededEvent(peer_id)
 {
-    alert("mahdi2")
 
     _peer_list[peer_id].createOffer()
     .then((offer)=>{return _peer_list[peer_id].setLocalDescription(offer);})
@@ -182,7 +178,6 @@ function handleNegotiationNeededEvent(peer_id)
 
 function handleOfferMsg(msg)
 {
-        alert("mahdi3")
 
     peer_id = msg['sender_id'];
 
@@ -211,7 +206,6 @@ function handleOfferMsg(msg)
 
 function handleAnswerMsg(msg)
 {
-    alert("mahdi4")
 
     peer_id = msg['sender_id'];
     console.log(`answer recieved from <${peer_id}>`);
@@ -222,7 +216,6 @@ function handleAnswerMsg(msg)
 
 function handleICECandidateEvent(event, peer_id)
 {
-    alert("mahdi6")
 
     if(event.candidate){
         sendViaServer({
@@ -236,7 +229,6 @@ function handleICECandidateEvent(event, peer_id)
 
 function handleNewICECandidateMsg(msg)
 {
-    alert("mahdi7")
 
     console.log(`ICE candidate recieved from <${peer_id}>`);
     var candidate = new RTCIceCandidate(msg.candidate);
@@ -247,7 +239,6 @@ function handleNewICECandidateMsg(msg)
 
 function handleTrackEvent(event, peer_id)
 {
-        alert("mahdi10")
 
     console.log(`track event recieved from <${peer_id}>`);
     
