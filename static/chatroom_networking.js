@@ -4,7 +4,6 @@ var _peer_list = {};
 // socketio 
 var protocol = window.location.protocol;
 var socket = io(protocol + '//' + document.domain + ':' + location.port, {autoConnect: false});
-alert(protocol + '//' + document.domain + ':' + location.port)
 
 document.addEventListener("DOMContentLoaded", (event)=>{
     startCamera();
@@ -90,6 +89,7 @@ function log_user_list()
     for(let key in _peer_list)
     {
         console.log(`${key}: ${_peer_list[key]}`);
+        alert(key)
     }
 }
 
@@ -132,6 +132,7 @@ function start_webrtc()
     for(let peer_id in _peer_list)
     {
         invite(peer_id);
+        alert(peer_id);
     }
 }
 
@@ -151,6 +152,8 @@ function invite(peer_id)
 
 function createPeerConnection(peer_id)
 {
+    alert("mahdi")
+
     _peer_list[peer_id] = new RTCPeerConnection(PC_CONFIG);
 
     _peer_list[peer_id].onicecandidate = (event) => {handleICECandidateEvent(event, peer_id)};
@@ -161,6 +164,8 @@ function createPeerConnection(peer_id)
 
 function handleNegotiationNeededEvent(peer_id)
 {
+    alert("mahdi2")
+
     _peer_list[peer_id].createOffer()
     .then((offer)=>{return _peer_list[peer_id].setLocalDescription(offer);})
     .then(()=>{
@@ -176,7 +181,9 @@ function handleNegotiationNeededEvent(peer_id)
 } 
 
 function handleOfferMsg(msg)
-{   
+{
+        alert("mahdi3")
+
     peer_id = msg['sender_id'];
 
     console.log(`offer recieved from <${peer_id}>`);
@@ -204,6 +211,8 @@ function handleOfferMsg(msg)
 
 function handleAnswerMsg(msg)
 {
+    alert("mahdi4")
+
     peer_id = msg['sender_id'];
     console.log(`answer recieved from <${peer_id}>`);
     let desc = new RTCSessionDescription(msg['sdp']);
@@ -213,6 +222,8 @@ function handleAnswerMsg(msg)
 
 function handleICECandidateEvent(event, peer_id)
 {
+    alert("mahdi6")
+
     if(event.candidate){
         sendViaServer({
             "sender_id": myID,
@@ -225,6 +236,8 @@ function handleICECandidateEvent(event, peer_id)
 
 function handleNewICECandidateMsg(msg)
 {
+    alert("mahdi7")
+
     console.log(`ICE candidate recieved from <${peer_id}>`);
     var candidate = new RTCIceCandidate(msg.candidate);
     _peer_list[msg["sender_id"]].addIceCandidate(candidate)
@@ -234,6 +247,8 @@ function handleNewICECandidateMsg(msg)
 
 function handleTrackEvent(event, peer_id)
 {
+        alert("mahdi10")
+
     console.log(`track event recieved from <${peer_id}>`);
     
     if(event.streams)
