@@ -48,9 +48,8 @@ function makeVideoElement(element_id, display_name)
     return wrapper_div;
 }
 
-function addVideoElement(peer_id, display_name) {
+function addVideoElement(peer_id, display_name, isLocal = false) {
     // جلوگیری از اضافه شدن ویدئوی تکراری
-    alert(display_name);
     if (document.getElementById(peer_id)) {
         console.log(`Video element for ${peer_id} already exists, skipping...`);
         return;
@@ -61,6 +60,10 @@ function addVideoElement(peer_id, display_name) {
     videoElement.id = peer_id;
     videoElement.autoplay = true;
     videoElement.playsInline = true;
+
+    if (isLocal) {
+        videoElement.muted = true; // صدای ویدیوی محلی را قطع کن
+    }
 
     let nameTag = document.createElement("div");
     nameTag.innerText = display_name;

@@ -59,33 +59,31 @@ socket.on("user-connect", (data)=>{
 
 
 
-socket.on("user-disconnect", (data)=>{
-    console.log("user-disconnect ", data);
-    let peer_id = data["sid"];
+socket.on("user-disconnect", (peer_id)=>{
+    console.log(`User disconnected: ${peer_id}`);
 
-    // بررسی کنیم که کاربر قبلاً در لیست بود
-    if (_peer_list[peer_id] !== undefined) {
-        closeConnection(peer_id);
-        removeVideoElement(peer_id);
-        delete _peer_list[peer_id]; // پاک کردن کاربر از لیست
+    let videoElement = document.getElementById(peer_id);
+    if (videoElement) {
+        videoElement.parentElement.remove(); // حذف ویدئو از صفحه
     }
 });
 
+
 socket.on("user-list", (data)=>{
-    console.log("user list received", data);
+    console.log("User list received", data);
     myID = data["my_id"];
 
     if ("list" in data) {
         let recvd_list = data["list"];
-        for (peer_id in recvd_list) {
+        for (let peer_id in recvd_list) {
             if (peer_id === myID) {
-                console.log(`Skipping self (${peer_id}) in user list.`);
-                continue;  // خود کاربر را رد کن
+                console.log(`Skipping self (${peer_id})`);
+                continue;  // ویدئوی خود کاربر نمایش داده نشود
             }
 
             let display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
-            addVideoElement(peer_id, display_name);
+            addVideoElement(peer_id, display_name, false);
         }
         start_webrtc();
     }
