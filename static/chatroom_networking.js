@@ -45,9 +45,10 @@ socket.on("connect", ()=>{
 
 socket.on("user-connect", (data)=>{
     console.log("user-connect ", data);
-    alert(data["sid"] + data["name"]);
     let peer_id = data["sid"];
     let display_name = data["name"];
+    alert(peer_id);
+    alert(display_name)
 
     if (peer_id === myID) {
         console.log(`Ignoring self video for ${display_name} (${peer_id})`);
@@ -84,8 +85,6 @@ socket.on("user-list", (data)=>{
 
             let display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
-            alert(display_name);
-            alert(peer_id);
             addVideoElement(peer_id, display_name, false);
         }
         start_webrtc();
