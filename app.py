@@ -40,8 +40,8 @@ def create_room():
     base_url = request.host_url.replace("http", "https")  # تبدیل HTTP به HTTPS
 
     room_links = {
-        "user1_link": f"{request.host_url}room/{room_id}/{user1_id}",
-        "user2_link": f"{request.host_url}room/{room_id}/{user2_id}"
+        "user1_link": f"{base_url}room/{room_id}/{user1_id}",
+        "user2_link": f"{base_url}room/{room_id}/{user2_id}"
     }
 
     return jsonify(room_links)
