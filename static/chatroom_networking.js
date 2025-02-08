@@ -1,7 +1,7 @@
 var myID;
 var _peer_list = {};
 
-// socketio 
+// socketio
 var protocol = window.location.protocol;
 var socket = io(protocol + '//' + document.domain + ':' + location.port, {autoConnect: false});
 
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", (event)=>{
     startCamera();
 });
 
-var camera_allowed=false; 
+var camera_allowed=false;
 var mediaConstraints = {
     audio: true, // We want an audio track
     video: {
@@ -78,10 +78,10 @@ socket.on("user-list", (data)=>{
     if ("list" in data) {
         let recvd_list = data["list"];
         for (let peer_id in recvd_list) {
-//            if (peer_id === myID) {
-//                console.log(`Skipping self (${peer_id})`);
-//                continue;  // ویدئوی خود کاربر نمایش داده نشود
-//            }
+            if (peer_id === myID) {
+                console.log(`Skipping self (${peer_id})`);
+                continue;  // ویدئوی خود کاربر نمایش داده نشود
+            }
 
             let display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
@@ -112,12 +112,12 @@ function log_user_list()
     }
 }
 
-//---------------[ webrtc ]--------------------    
+//---------------[ webrtc ]--------------------
 
 var PC_CONFIG = {
     iceServers: [
         {
-            urls: ['stun:stun.l.google.com:19302', 
+            urls: ['stun:stun.l.google.com:19302',
                     'stun:stun1.l.google.com:19302',
                     'stun:stun2.l.google.com:19302',
                     'stun:stun3.l.google.com:19302',
@@ -198,7 +198,7 @@ function handleNegotiationNeededEvent(peer_id)
         });
     })
     .catch(log_error);
-} 
+}
 
 function handleOfferMsg(msg)
 {
@@ -206,7 +206,7 @@ function handleOfferMsg(msg)
     peer_id = msg['sender_id'];
 
     console.log(`offer recieved from <${peer_id}>`);
-    
+
     createPeerConnection(peer_id);
     let desc = new RTCSessionDescription(msg['sdp']);
     _peer_list[peer_id].setRemoteDescription(desc)
@@ -265,7 +265,7 @@ function handleTrackEvent(event, peer_id)
 {
 
     console.log(`track event recieved from <${peer_id}>`);
-    
+
     if(event.streams)
     {
         getVideoObj(peer_id).srcObject = event.streams[0];
