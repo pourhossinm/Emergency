@@ -166,6 +166,7 @@ function invite(peer_id)
     {
         console.log(`Creating peer connection for <${peer_id}> ...`);
         createPeerConnection(peer_id);
+        alert(peer_id);
 
         let local_stream = myVideo.srcObject;
         local_stream.getTracks().forEach((track)=>{_peer_list[peer_id].addTrack(track, local_stream);});

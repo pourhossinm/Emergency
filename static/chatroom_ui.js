@@ -59,7 +59,6 @@ function addVideoElement(peer_id, display_name, isLocal = false) {
         console.log(`Video element for ${peer_id} already exists, skipping...`);
         return;
     }
-    alert(display_name);
     let videoGrid = document.getElementById("video-grid");
     let videoElement = document.createElement("video");
     videoElement.id = peer_id;
