@@ -124,21 +124,46 @@ def on_join_room(data):
     # ارسال لیست کاربران به اعضای اتاق
     emit("user-list", {"list": list(_users_in_room[room_id].values())}, room=room_id)
 
+# @socketio.on("disconnect")
+# def on_disconnect():
+#     sid = request.sid
+#     room_id = _room_of_sid[sid]
+#     display_name = _name_of_sid[sid]
+#
+#     print("[{}] Member left: {}<{}>".format(room_id, display_name, sid))
+#     emit("user-disconnect", {"sid": sid}, broadcast=True, include_self=False, room=room_id)
+#
+#     _users_in_room[room_id].remove(sid)
+#     if len(_users_in_room[room_id]) == 0:
+#         _users_in_room.pop(room_id)
+#
+#     _room_of_sid.pop(sid)
+#     _name_of_sid.pop(sid)
+#
+#     print("\nusers: ", _users_in_room, "\n")
+
 @socketio.on("disconnect")
 def on_disconnect():
     sid = request.sid
-    room_id = _room_of_sid[sid]
-    display_name = _name_of_sid[sid]
 
-    print("[{}] Member left: {}<{}>".format(room_id, display_name, sid))
+    # بررسی کنیم که آیا کاربر در اتاق‌ها ثبت شده یا نه
+    if sid not in _room_of_sid:
+        print(f"[Warning] SID {sid} not found in _room_of_sid. Ignoring disconnect.")
+        return
+
+    room_id = _room_of_sid.pop(sid, None)
+    display_name = _name_of_sid.pop(sid, "Unknown")
+
+    print(f"[{room_id}] Member left: {display_name} <{sid}>")
     emit("user-disconnect", {"sid": sid}, broadcast=True, include_self=False, room=room_id)
 
-    _users_in_room[room_id].remove(sid)
-    if len(_users_in_room[room_id]) == 0:
-        _users_in_room.pop(room_id)
+    # به جای `remove(sid)`, از `pop(sid, None)` برای حذف از دیکشنری استفاده می‌کنیم
+    if room_id in _users_in_room:
+        _users_in_room[room_id].pop(sid, None)  # ✅ حذف `sid` از دیکشنری
 
-    _room_of_sid.pop(sid)
-    _name_of_sid.pop(sid)
+        # اگر اتاق خالی شد، آن را پاک کنیم
+        if not _users_in_room[room_id]:
+            del _users_in_room[room_id]
 
     print("\nusers: ", _users_in_room, "\n")
 

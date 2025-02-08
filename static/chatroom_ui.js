@@ -48,10 +48,31 @@ function makeVideoElement(element_id, display_name)
     return wrapper_div;
 }
 
-function addVideoElement(element_id, display_name)
-{        
-    document.getElementById("video_grid").appendChild(makeVideoElement(element_id, display_name));
+function addVideoElement(peer_id, display_name) {
+    // جلوگیری از اضافه شدن ویدئوی تکراری
+    alert(display_name);
+    if (document.getElementById(peer_id)) {
+        console.log(`Video element for ${peer_id} already exists, skipping...`);
+        return;
+    }
+
+    let videoGrid = document.getElementById("video-grid");
+    let videoElement = document.createElement("video");
+    videoElement.id = peer_id;
+    videoElement.autoplay = true;
+    videoElement.playsInline = true;
+
+    let nameTag = document.createElement("div");
+    nameTag.innerText = display_name;
+    nameTag.classList.add("nameTag");
+
+    let videoContainer = document.createElement("div");
+    videoContainer.appendChild(videoElement);
+    videoContainer.appendChild(nameTag);
+
+    videoGrid.appendChild(videoContainer);
 }
+
 function removeVideoElement(element_id)
 {    
     let v = getVideoObj(element_id);

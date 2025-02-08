@@ -42,35 +42,55 @@ socket.on("connect", ()=>{
     console.log("socket connected....");
     socket.emit("join-room", {"room_id": myRoomID, "user_id": myUserID});
 });
+
 socket.on("user-connect", (data)=>{
     console.log("user-connect ", data);
     let peer_id = data["sid"];
     let display_name = data["name"];
-    _peer_list[peer_id] = undefined; // add new user to user list
+
+    if (peer_id === myID) {
+        console.log(`Ignoring self video for ${display_name} (${peer_id})`);
+        return;  // از اضافه کردن خود کاربر جلوگیری کن
+    }
+
+    _peer_list[peer_id] = undefined;
     addVideoElement(peer_id, display_name);
 });
+
+
+
 socket.on("user-disconnect", (data)=>{
     console.log("user-disconnect ", data);
     let peer_id = data["sid"];
-    closeConnection(peer_id);
-    removeVideoElement(peer_id);
+
+    // بررسی کنیم که کاربر قبلاً در لیست بود
+    if (_peer_list[peer_id] !== undefined) {
+        closeConnection(peer_id);
+        removeVideoElement(peer_id);
+        delete _peer_list[peer_id]; // پاک کردن کاربر از لیست
+    }
 });
+
 socket.on("user-list", (data)=>{
-    console.log("user list recvd ", data);
+    console.log("user list received", data);
     myID = data["my_id"];
-    if( "list" in data) // not the first to connect to room, existing user list recieved
-    {
-        let recvd_list = data["list"];  
-        // add existing users to user list
-        for(peer_id in recvd_list)
-        {
-            display_name = recvd_list[peer_id];
+
+    if ("list" in data) {
+        let recvd_list = data["list"];
+        for (peer_id in recvd_list) {
+            if (peer_id === myID) {
+                console.log(`Skipping self (${peer_id}) in user list.`);
+                continue;  // خود کاربر را رد کن
+            }
+
+            let display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
             addVideoElement(peer_id, display_name);
-        } 
+        }
         start_webrtc();
-    }    
+    }
 });
+
 
 function closeConnection(peer_id)
 {
@@ -128,12 +148,13 @@ socket.on("data", (msg)=>{
     }
 });
 
-function start_webrtc()
-{
-    // send offer to all other members
-    for(let peer_id in _peer_list)
-    {
-        invite(peer_id);
+function start_webrtc() {
+    for(let peer_id in _peer_list) {
+        if (_peer_list[peer_id] === undefined) { // بررسی اینکه اتصال هنوز برقرار نشده است
+            invite(peer_id);
+        } else {
+            console.log(`Skipping invite for already connected peer: ${peer_id}`);
+        }
     }
 }
 
