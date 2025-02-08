@@ -80,10 +80,11 @@ socket.on("user-list", (data)=>{
                 console.log(`Skipping self (${peer_id})`);
                 continue;  // ویدئوی خود کاربر نمایش داده نشود
             }
-        alert(recvd_list)
 
             let display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
+            alert(display_name);
+            alert(peer_id);
             addVideoElement(peer_id, display_name, false);
         }
         start_webrtc();
