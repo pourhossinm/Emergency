@@ -37,6 +37,8 @@ def create_room():
     user1_id = str(uuid.uuid4())[:8]  # ایجاد شناسه یکتا برای کاربر 1
     user2_id = str(uuid.uuid4())[:8]  # ایجاد شناسه یکتا برای کاربر 2
 
+    base_url = request.host_url.replace("http", "https")  # تبدیل HTTP به HTTPS
+
     room_links = {
         "user1_link": f"{request.host_url}room/{room_id}/{user1_id}",
         "user2_link": f"{request.host_url}room/{room_id}/{user2_id}"
@@ -141,16 +143,34 @@ def on_disconnect():
     print("\nusers: ", _users_in_room, "\n")
 
 
+# @socketio.on("data")
+# def on_data(data):
+#     sender_sid = data['sender_id']
+#     target_sid = data['target_id']
+#     if sender_sid != request.sid:
+#         print("[Not supposed to happen!] request.sid and sender_id don't match!!!")
+#
+#     if data["type"] != "new-ice-candidate":
+#         print('{} message from {} to {}'.format(data["type"], sender_sid, target_sid))
+#     socketio.emit('data', data, room=target_sid)
+
 @socketio.on("data")
 def on_data(data):
+    if 'sender_id' not in data or 'target_id' not in data:
+        print("Error: Missing sender_id or target_id in data:", data)
+        return  # از ادامه‌ی پردازش جلوگیری کن
+
     sender_sid = data['sender_id']
     target_sid = data['target_id']
+
     if sender_sid != request.sid:
-        print("[Not supposed to happen!] request.sid and sender_id don't match!!!")
+        print("[Error] sender_id doesn't match request.sid!")
 
     if data["type"] != "new-ice-candidate":
         print('{} message from {} to {}'.format(data["type"], sender_sid, target_sid))
+
     socketio.emit('data', data, room=target_sid)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب

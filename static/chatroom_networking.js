@@ -108,7 +108,10 @@ var PC_CONFIG = {
 };
 
 function log_error(e){console.log("[ERROR] ", e);}
-function sendViaServer(data){socket.emit("data", data);}
+function sendViaServer(data){
+    data["sender_id"] = myUserID;
+    socket.emit("data", data);
+}
 
 socket.on("data", (msg)=>{
     switch(msg["type"])
