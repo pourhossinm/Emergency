@@ -78,10 +78,10 @@ socket.on("user-list", (data)=>{
     if ("list" in data) {
         let recvd_list = data["list"];
         for (let peer_id in recvd_list) {
-            if (peer_id === myID) {
-                console.log(`Skipping self (${peer_id})`);
-                continue;  // ویدئوی خود کاربر نمایش داده نشود
-            }
+//            if (peer_id === myID) {
+//                console.log(`Skipping self (${peer_id})`);
+//                continue;  // ویدئوی خود کاربر نمایش داده نشود
+//            }
 
             let display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
