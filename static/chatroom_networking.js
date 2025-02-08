@@ -40,7 +40,7 @@ function startCamera()
 
 socket.on("connect", ()=>{
     console.log("socket connected....");
-    socket.emit("join-room", {"room_id": myRoomID});
+    socket.emit("join-room", {"room_id": myRoomID, "user_id": myUserID});
 });
 socket.on("user-connect", (data)=>{
     console.log("user-connect ", data);
