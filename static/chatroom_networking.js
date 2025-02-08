@@ -23,7 +23,7 @@ function startCamera()
     .then((stream)=>{
         myVideo.srcObject = stream;
         camera_allowed = true;
-        setAudioMuteState(audioMuted);                
+        setAudioMuteState(audioMuted);
         setVideoMuteState(videoMuted);
         //start the socketio connection
 
@@ -80,6 +80,7 @@ socket.on("user-list", (data)=>{
                 console.log(`Skipping self (${peer_id})`);
                 continue;  // ویدئوی خود کاربر نمایش داده نشود
             }
+        alert(recvd_list)
 
             let display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;

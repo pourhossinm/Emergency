@@ -37,7 +37,7 @@ def create_room():
     user1_id = str(uuid.uuid4())[:8]  # ایجاد شناسه یکتا برای کاربر 1
     user2_id = str(uuid.uuid4())[:8]  # ایجاد شناسه یکتا برای کاربر 2
 
-    base_url = request.host_url.replace("http", "https")  # تبدیل HTTP به HTTPS
+    base_url = request.host_url.replace("http", "http")  # تبدیل HTTP به HTTPS
 
     room_links = {
         "user1_link": f"{base_url}room/{room_id}/{user1_id}",
