@@ -45,7 +45,7 @@ socket.on("connect", ()=>{
 
 socket.on("user-connect", (data)=>{
     console.log("user-connect ", data);
-    alert(data["sid"]);
+    alert(data["sid"] + data["name"]);
     let peer_id = data["sid"];
     let display_name = data["name"];
 
