@@ -72,20 +72,15 @@ socket.on("user-disconnect", (peer_id)=>{
 
 
 socket.on("user-list", (data)=>{
-    console.log("User list received", data);
+    console.log("user list recvd ", data);
     myID = data["my_id"];
-
-    if ("list" in data) {
+    if( "list" in data) // not the first to connect to room, existing user list recieved
+    {
         let recvd_list = data["list"];
-
-        for (peer_id in recvd_list) {
-//            if (peer_id === myID) {
-//                console.log(`Skipping self (${peer_id})`);
-//                continue;  // ویدئوی خود کاربر نمایش داده نشود
-//            }
-            alert(recvd_list);
+        // add existing users to user list
+        for(peer_id in recvd_list)
+        {
             alert(peer_id);
-
             display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
             addVideoElement(peer_id, display_name);
