@@ -40,37 +40,21 @@ function startCamera()
 
 socket.on("connect", ()=>{
     console.log("socket connected....");
-    socket.emit("join-room", {"room_id": myRoomID, "user_id": myUserID});
+    socket.emit("join-room", {"room_id": myRoomID});
 });
-
 socket.on("user-connect", (data)=>{
     console.log("user-connect ", data);
     let peer_id = data["sid"];
     let display_name = data["name"];
-    alert(peer_id);
-    alert(display_name)
-
-    if (peer_id === myID) {
-        console.log(`Ignoring self video for ${display_name} (${peer_id})`);
-        return;  // از اضافه کردن خود کاربر جلوگیری کن
-    }
-
-    _peer_list[peer_id] = undefined;
+    _peer_list[peer_id] = undefined; // add new user to user list
     addVideoElement(peer_id, display_name);
 });
-
-
-
-socket.on("user-disconnect", (peer_id)=>{
-    console.log(`User disconnected: ${peer_id}`);
-
-    let videoElement = document.getElementById(peer_id);
-    if (videoElement) {
-        videoElement.parentElement.remove(); // حذف ویدئو از صفحه
-    }
+socket.on("user-disconnect", (data)=>{
+    console.log("user-disconnect ", data);
+    let peer_id = data["sid"];
+    closeConnection(peer_id);
+    removeVideoElement(peer_id);
 });
-
-
 socket.on("user-list", (data)=>{
     console.log("user list recvd ", data);
     myID = data["my_id"];
@@ -80,7 +64,6 @@ socket.on("user-list", (data)=>{
         // add existing users to user list
         for(peer_id in recvd_list)
         {
-            alert(peer_id);
             display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
             addVideoElement(peer_id, display_name);
@@ -88,7 +71,6 @@ socket.on("user-list", (data)=>{
         start_webrtc();
     }
 });
-
 
 function closeConnection(peer_id)
 {
@@ -126,10 +108,7 @@ var PC_CONFIG = {
 };
 
 function log_error(e){console.log("[ERROR] ", e);}
-function sendViaServer(data){
-    data["sender_id"] = myUserID;
-    socket.emit("data", data);
-}
+function sendViaServer(data){socket.emit("data", data);}
 
 socket.on("data", (msg)=>{
     switch(msg["type"])
@@ -146,15 +125,12 @@ socket.on("data", (msg)=>{
     }
 });
 
-function start_webrtc() {
-        alert("1");
-
-    for(let peer_id in _peer_list) {
-        if (_peer_list[peer_id] === undefined) { // بررسی اینکه اتصال هنوز برقرار نشده است
-            invite(peer_id);
-        } else {
-            console.log(`Skipping invite for already connected peer: ${peer_id}`);
-        }
+function start_webrtc()
+{
+    // send offer to all other members
+    for(let peer_id in _peer_list)
+    {
+        invite(peer_id);
     }
 }
 
@@ -166,6 +142,7 @@ function invite(peer_id)
     {
         console.log(`Creating peer connection for <${peer_id}> ...`);
         createPeerConnection(peer_id);
+
         let local_stream = myVideo.srcObject;
         local_stream.getTracks().forEach((track)=>{_peer_list[peer_id].addTrack(track, local_stream);});
     }
