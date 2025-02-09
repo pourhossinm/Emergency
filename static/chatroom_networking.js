@@ -147,7 +147,7 @@ socket.on("data", (msg)=>{
 });
 
 function start_webrtc() {
-        alert(_peer_list);
+        alert("1");
 
     for(let peer_id in _peer_list) {
         if (_peer_list[peer_id] === undefined) { // بررسی اینکه اتصال هنوز برقرار نشده است
