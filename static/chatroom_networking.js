@@ -77,16 +77,18 @@ socket.on("user-list", (data)=>{
 
     if ("list" in data) {
         let recvd_list = data["list"];
-        alert(data["list"]);
-        for (let peer_id in recvd_list) {
+
+        for (peer_id in recvd_list) {
 //            if (peer_id === myID) {
 //                console.log(`Skipping self (${peer_id})`);
 //                continue;  // ویدئوی خود کاربر نمایش داده نشود
 //            }
+            alert(recvd_list);
+            alert(peer_id);
 
-            let display_name = recvd_list[peer_id];
+            display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
-            addVideoElement(peer_id, display_name, false);
+            addVideoElement(peer_id, display_name);
         }
         start_webrtc();
     }
