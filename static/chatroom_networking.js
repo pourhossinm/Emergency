@@ -77,6 +77,7 @@ socket.on("user-list", (data)=>{
 
     if ("list" in data) {
         let recvd_list = data["list"];
+        alert(data["list"]);
         for (let peer_id in recvd_list) {
 //            if (peer_id === myID) {
 //                console.log(`Skipping self (${peer_id})`);
@@ -149,8 +150,9 @@ socket.on("data", (msg)=>{
 });
 
 function start_webrtc() {
+        alert(_peer_list);
+
     for(let peer_id in _peer_list) {
-        alert(peer_id);
         if (_peer_list[peer_id] === undefined) { // بررسی اینکه اتصال هنوز برقرار نشده است
             invite(peer_id);
         } else {
