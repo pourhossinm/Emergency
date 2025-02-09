@@ -78,10 +78,10 @@ socket.on("user-list", (data)=>{
     if ("list" in data) {
         let recvd_list = data["list"];
         for (let peer_id in recvd_list) {
-            if (peer_id === myID) {
-                console.log(`Skipping self (${peer_id})`);
-                continue;  // ویدئوی خود کاربر نمایش داده نشود
-            }
+//            if (peer_id === myID) {
+//                console.log(`Skipping self (${peer_id})`);
+//                continue;  // ویدئوی خود کاربر نمایش داده نشود
+//            }
 
             let display_name = recvd_list[peer_id];
             _peer_list[peer_id] = undefined;
@@ -150,6 +150,7 @@ socket.on("data", (msg)=>{
 
 function start_webrtc() {
     for(let peer_id in _peer_list) {
+        alert(peer_id);
         if (_peer_list[peer_id] === undefined) { // بررسی اینکه اتصال هنوز برقرار نشده است
             invite(peer_id);
         } else {
@@ -166,8 +167,6 @@ function invite(peer_id)
     {
         console.log(`Creating peer connection for <${peer_id}> ...`);
         createPeerConnection(peer_id);
-        alert(peer_id);
-
         let local_stream = myVideo.srcObject;
         local_stream.getTracks().forEach((track)=>{_peer_list[peer_id].addTrack(track, local_stream);});
     }

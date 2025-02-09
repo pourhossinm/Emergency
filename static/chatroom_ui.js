@@ -55,10 +55,10 @@ function makeVideoElement(element_id, display_name)
 
 function addVideoElement(peer_id, display_name, isLocal = false) {
     // جلوگیری از اضافه شدن ویدئوی تکراری
-    if (document.getElementById(peer_id)) {
-        console.log(`Video element for ${peer_id} already exists, skipping...`);
-        return;
-    }
+//    if (document.getElementById(peer_id)) {
+//        console.log(`Video element for ${peer_id} already exists, skipping...`);
+//        return;
+//    }
     let videoGrid = document.getElementById("video-grid");
     let videoElement = document.createElement("video");
     videoElement.id = peer_id;
