@@ -1,5 +1,9 @@
 body{
     background-color: rgb(223, 219, 209);
+    direction: rtl;
+    text-align: right;
+    font-family : "b nazanin";
+
 }
 .heading
 {
@@ -7,9 +11,13 @@ body{
     padding: 1rem 1rem 1rem 2rem;
     background-color: rgb(49, 46, 42);
     color: rgb(255, 207, 149);
+
 }
 .heading-mark{
     color: rgb(255, 244, 230);
     font-weight: bold;
     padding: 3px;
 ;}
+.mb-4,.my-4{
+    margin-bottom:1.5rem!important;
+}

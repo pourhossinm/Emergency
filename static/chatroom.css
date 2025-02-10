@@ -17,7 +17,7 @@
     height: 360px;
 }
 .video-grid:empty::before{
-    content: "No one else is connected!";
+    content: "هیچ کاربر دیگری متصل نیست !";
 }
 
 .video-item {

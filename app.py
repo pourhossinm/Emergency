@@ -53,7 +53,6 @@ def enter_room(room_id, user_id):
 
 @app.route("/room/<string:room_id>/checkpoint/", methods=["GET", "POST"])
 def entry_checkpoint(room_id):
-    print(request.method)
     if request.method == "POST":
         display_name = request.form['display_name']
         mute_audio = request.form['mute_audio']
@@ -78,7 +77,6 @@ def on_join_room(data):
     sid = request.sid
     room_id = data["room_id"]
     display_name = session[room_id]["name"]
-    print(f"ali {display_name}")
 
     # register sid to the room
     join_room(room_id)
