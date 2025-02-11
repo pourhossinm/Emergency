@@ -1,5 +1,5 @@
 
-
+from database import create_tables, add_closed_room, is_room_closed
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 
@@ -21,6 +21,8 @@ _users_in_room = {} # stores room wise user list
 _room_of_sid = {} # stores room joined by an used
 _name_of_sid = {} # stores display name of users
 
+_room_owner = {}  # ذخیره user1_id برای هر اتاق
+create_tables()
 @app.route("/create-room/", methods=["GET"])
 def create_room():
     room_id = str(uuid.uuid4())[:8]  # ایجاد یک شناسه یکتا برای اتاق (8 کاراکتری)
@@ -29,12 +31,16 @@ def create_room():
 
     base_url = request.host_url.replace("http", "http")  # تبدیل HTTP به HTTPS
 
+    # ذخیره مالک اتاق (کاربر 1)
+    _room_owner[room_id] = user1_id
+
     room_links = {
         "user1_link": f"{base_url}room/{room_id}/{user1_id}",
         "user2_link": f"{base_url}room/{room_id}/{user2_id}"
     }
 
     return jsonify(room_links)
+
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -45,11 +51,23 @@ def index():
 
     return render_template("home.html")
 
+# @app.route("/room/<string:room_id>/<string:user_id>/")
+# def enter_room(room_id, user_id):
+#     session[room_id] = {"name": user_id, "mute_audio":0, "mute_video":0}
+#     return render_template("chatroom.html", room_id=room_id, user_id=user_id)
+
+
 @app.route("/room/<string:room_id>/<string:user_id>/")
 def enter_room(room_id, user_id):
-    session[room_id] = {"name": user_id, "mute_audio":0, "mute_video":0}
-    return render_template("chatroom.html", room_id=room_id, user_id=user_id)
+    if is_room_closed(room_id):  # بررسی بسته بودن اتاق
+        return "این اتاق بسته شده است و دیگر قابل دسترسی نیست.", 403  # پاسخ مناسب
 
+    # اگر این اولین کاربری است که وارد اتاق می‌شود، آن را مالک اتاق در نظر بگیریم
+    if room_id not in _room_owner:
+        _room_owner[room_id] = user_id  # اولین کاربر را به عنوان user1 ذخیره کنیم
+
+    session[room_id] = {"name": user_id, "mute_audio": 0, "mute_video": 0}
+    return render_template("chatroom.html", room_id=room_id, user_id=user_id)
 
 @app.route("/room/<string:room_id>/checkpoint/", methods=["GET", "POST"])
 def entry_checkpoint(room_id):
@@ -99,24 +117,52 @@ def on_join_room(data):
     print("\nusers: ", _users_in_room, "\n")
 
 
+# @socketio.on("disconnect")
+# def on_disconnect():
+#     sid = request.sid
+#     room_id = _room_of_sid[sid]
+#     display_name = _name_of_sid[sid]
+#
+#     print("[{}] Member left: {}<{}>".format(room_id, display_name, sid))
+#     emit("user-disconnect", {"sid": sid}, broadcast=True, include_self=False, room=room_id)
+#
+#     _users_in_room[room_id].remove(sid)
+#     if len(_users_in_room[room_id]) == 0:
+#         _users_in_room.pop(room_id)
+#
+#     _room_of_sid.pop(sid)
+#     _name_of_sid.pop(sid)
+#
+#     print("\nusers: ", _users_in_room, "\n")
+
+_closed_rooms = set()  # لیست اتاق‌های بسته‌شده
+
 @socketio.on("disconnect")
 def on_disconnect():
     sid = request.sid
-    room_id = _room_of_sid[sid]
+    room_id = _room_of_sid.get(sid)
+
+    if not room_id:
+        return
+
     display_name = _name_of_sid[sid]
 
     print("[{}] Member left: {}<{}>".format(room_id, display_name, sid))
     emit("user-disconnect", {"sid": sid}, broadcast=True, include_self=False, room=room_id)
 
     _users_in_room[room_id].remove(sid)
-    if len(_users_in_room[room_id]) == 0:
-        _users_in_room.pop(room_id)
 
-    _room_of_sid.pop(sid)
-    _name_of_sid.pop(sid)
+    # اگر کاربری که خارج شده، همان user1_id باشد، اتاق را در دیتابیس ثبت کنیم
+    if _room_owner.get(room_id) == display_name:
+        print(f"Closing room {room_id} because user1_id left.")
+        _users_in_room.pop(room_id, None)
+        add_closed_room(room_id)  # ثبت اتاق در دیتابیس
+        _room_owner.pop(room_id, None)  # حذف مالک اتاق
 
-    print("\nusers: ", _users_in_room, "\n")
+    _room_of_sid.pop(sid, None)
+    _name_of_sid.pop(sid, None)
 
+    print("\nActive rooms: ", _users_in_room, "\n")
 
 @socketio.on("data")
 def on_data(data):

@@ -46,7 +46,6 @@ socket.on("user-connect", (data)=>{
     console.log("user-connect ", data);
     let peer_id = data["sid"];
     let display_name = data["name"];
-    alert(display_name);
     _peer_list[peer_id] = undefined; // add new user to user list
     addVideoElement(peer_id, display_name);
 });

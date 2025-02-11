@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 import sqlite3
 import webbrowser
+import uuid
 
 # تنظیمات سریال
 try:
@@ -53,7 +54,7 @@ def send_sms(phone, message):
     # شروع خواندن سریال در یک ترد جداگانه (برای نمایش هم‌زمان پیام‌ها)
     # threading.Thread(target=read_from_serial, daemon=True).start()
 
-
+    print(message)
     phone_ucs2 = to_ucs2_hex(phone)
     text_ucs2 = to_ucs2_hex(message)
 
@@ -65,7 +66,7 @@ def send_sms(phone, message):
     conn.commit()
     fetch_data()  # به‌روز‌رسانی جدول
     entry_phone.delete(0, tk.END)
-    entry_message.delete(0, tk.END)
+    # entry_message.delete(0, tk.END)
     messagebox.showinfo("ثبت موفق", "اطلاعات با موفقیت ذخیره شد!")
     time.sleep(3)  # تاخیر بین ارسال‌ها
 
@@ -81,7 +82,14 @@ def open_url():
         messagebox.showwarning("خطا", "لطفاً یک آدرس وارد کنید!")
 def submit():
     Phone = entry_phone.get()
-    Messgae = entry_message.get()
+    uuid_user1 = str(uuid.uuid4())[:4]
+    uuid_user2 = str(uuid.uuid4())[:4]
+
+    farsi_message = "کلیک کنید."
+    temp_link = f"http://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user1}"
+    entry_url.insert(0, temp_link)
+    temp_message = f"{farsi_message} http://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user2}"
+    Messgae = temp_message
 
     if Phone and Messgae:
         send_sms(Phone, Messgae)
@@ -97,9 +105,9 @@ if __name__ == "__main__":
     entry_phone = tk.Entry(root)
     entry_phone.pack(pady=5)
 
-    tk.Label(root, text="پیام:").pack(pady=5)
-    entry_message = tk.Entry(root)
-    entry_message.pack(pady=5)
+    # tk.Label(root, text="پیام:").pack(pady=5)
+    # entry_message = tk.Entry(root)
+    # entry_message.pack(pady=5)
 
     # لیبل و ورودی آدرس وب
     tk.Label(root, text="آدرس وب:").pack(pady=5)
