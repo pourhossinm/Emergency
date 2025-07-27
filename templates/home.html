@@ -1,29 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- icon -->
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% extends "base.html" %}
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% block title %}چت روم - اورژانس{% endblock %}
 
-
-
-    <!-- custom css -->
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سامانه اورژانس</title>
-</head>
-<body>
-
+{% block content %}
+    <div class="heading mb-4"></div>
     <div class="heading mb-4">
         <h1 class="display-4">سامانه راهنمای تصویری</h1>
     </div>
@@ -34,6 +14,5 @@
 
 
     </div>
-    
-</body>
-</html>
+
+{% endblock %}

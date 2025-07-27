@@ -3,6 +3,8 @@ body{
     direction: rtl;
     text-align: right;
     font-family : "b nazanin";
+        height: auto;
+        overflow-y: auto !important;
 
 }
 .heading
