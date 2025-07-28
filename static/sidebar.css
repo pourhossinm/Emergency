@@ -1,0 +1,134 @@
+body {
+    font-family: "b nazanin", sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    overflow-y: auto !important;
+
+}
+
+/* 🟢 استایل کلی صفحه با سایدبار */
+.wrapper {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 🟢 تنظیمات سایدبار */
+#sidebar {
+    width: 250px;
+    background: #343a40;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    height: 100vh;
+    position: fixed;
+    right: 0; /* نمایش سایدبار در سمت راست */
+    top: 0;
+}
+
+/* وقتی سایدبار بسته شود */
+#sidebar.active {
+    margin-right: -250px;
+}
+
+/* 🟢 استایل منو */
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #212529;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    list-style: none;
+}
+
+#sidebar ul li {
+    padding: 10px;
+    font-size: 1rem;
+}
+
+#sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    transition: 0.3s;
+}
+
+#sidebar ul li a:hover {
+    background: #495057;
+    border-radius: 5px;
+}
+
+/* 🟢 تنظیم محتوای سایت در کنار سایدبار */
+#content {
+    width: calc(100% - 250px); /* وقتی سایدبار باز است */
+    padding: 20px;
+    transition: all 0.3s ease-in-out;
+    margin-right: 250px;
+}
+
+/* وقتی سایدبار بسته است */
+#content.active {
+    width: 100%;
+    margin-right: 0;
+}
+
+/* 🟢 دکمه باز و بسته شدن سایدبار */
+#sidebarCollapse {
+    margin: 10px;
+}
+
+/* 🟢 تنظیمات برای موبایل */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-right: -250px;
+    }
+
+    #sidebar.active {
+        margin-right: 0;
+    }
+
+    #content {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    #content.active {
+        margin-right: 250px;
+        width: calc(100% - 250px);
+    }
+}
+/* 🟢 تنظیمات زیرمنو */
+#sidebar ul ul {
+    display: none;
+    padding-left: 10px;
+}
+
+#sidebar ul li a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+#sidebar ul li a:hover {
+    background: #495057;
+    border-radius: 5px;
+}
+
+/* وقتی زیرمنو باز شود */
+#sidebar ul ul.show {
+    display: block;
+}
+
+/* استایل زیرمنو */
+#roomSubmenu li a {
+    padding-left: 25px;
+    font-size: 0.9rem;
+}

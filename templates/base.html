@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}سامانه اورژانس{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- 🟢 سایدبار -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>🚑 اورژانس تصویری</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> خانه</a></li>
+                
+                <!-- 🟢 آیتم "ایجاد اتاق" با زیرمنو -->
+                <li>
+                    <a href="#roomSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-plus-circle"></i> ایجاد اتاق
+                    </a>
+                    <ul class="collapse list-unstyled" id="roomSubmenu">
+                        <li><a href="{{ url_for('create_room') }}"><i class="fas fa-video"></i> ایجاد اتاق تصویری</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> ایجاد اتاق صوتی</a></li>
+                        <li><a href="#"><i class="fas fa-users"></i> ایجاد اتاق گروهی</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="#"><i class="fas fa-info-circle"></i> درباره ما</a></li>
+                <li><a href="#"><i class="fas fa-phone-alt"></i> تماس با ما</a></li>
+            </ul>
+        </nav>
+
+        <!-- 🟢 محتوای اصلی صفحه -->
+        <div id="content">
+            <button type="button" id="sidebarCollapse" class="btn btn-dark">
+                <i class="fas fa-bars"></i> منو
+            </button>
+
+            <div class="container mt-4">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
