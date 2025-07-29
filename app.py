@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()
 
 from database import create_tables, add_closed_room, is_room_closed
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
@@ -9,12 +11,14 @@ import os
 import uuid
 
 
+
 Payload.max_decode_packets = 200
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "thisismys3cr3tk3y"
 
-socketio = SocketIO(app, cors_allowed_origins="*")
+# socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, async_mode='eventlet')
 
 
 _users_in_room = {} # stores room wise user list
@@ -193,6 +197,9 @@ def on_data(data):
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
-    socketio.run(app, host='0.0.0.0', port=port)
-    # socketio.run(app, debug=True)
+    # port = int(os.environ.get("PORT", 5000))  # تنظیم پورت مناسب
+    # socketio.run(app, host='0.0.0.0', port=port)
+    # # socketio.run(app, debug=True)
+
+    port = int(os.environ.get("PORT", 5000))
+    socketio.run(app, host='127.0.0.1', port=port, debug=True)

@@ -112,8 +112,8 @@ def send_sms(phone, message):
 
 def submit():
     Phone = entry_phone.get()
-    uuid_user1 = str(uuid.uuid4())[:4]
-    uuid_user2 = str(uuid.uuid4())[:4]
+    uuid_user1 = str(uuid.uuid4())[:8]
+    uuid_user2 = str(uuid.uuid4())[:8]
 
     temp_link = f"http://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user1}"
     entry_url.insert(0, temp_link)

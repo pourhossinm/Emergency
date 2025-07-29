@@ -23,9 +23,9 @@ def add_closed_room(room_id):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO closed_rooms (room_id) VALUES (?)", (room_id,))
-    conn.commit()
-    conn.close()
+    # cursor.execute("INSERT INTO closed_rooms (room_id) VALUES (?)", (room_id,))
+    # conn.commit()
+    # conn.close()
 
 
 def is_room_closed(room_id):
