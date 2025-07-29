@@ -73,6 +73,7 @@ def enter_room(room_id, user_id):
     session[room_id] = {"name": user_id, "mute_audio": 0, "mute_video": 0}
     return render_template("chatroom.html", room_id=room_id, user_id=user_id)
 
+
 @app.route("/room/<string:room_id>/checkpoint/", methods=["GET", "POST"])
 def entry_checkpoint(room_id):
     if request.method == "POST":

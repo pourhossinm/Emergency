@@ -249,3 +249,4 @@ function handleTrackEvent(event, peer_id)
         getVideoObj(peer_id).srcObject = event.streams[0];
     }
 }
+
