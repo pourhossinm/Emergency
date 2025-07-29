@@ -3,7 +3,10 @@ var _peer_list = {};
 
 // socketio
 var protocol = window.location.protocol;
-var socket = io(window.location.origin, { autoConnect: false });
+const protocol = window.location.protocol;
+const host = window.location.host;
+const socket = io(`${protocol}//${host}`, { path: "/socket.io", autoConnect: false });
+
 
 document.addEventListener("DOMContentLoaded", (event)=>{
     startCamera();

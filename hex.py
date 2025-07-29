@@ -115,9 +115,9 @@ def submit():
     uuid_user1 = str(uuid.uuid4())[:8]
     uuid_user2 = str(uuid.uuid4())[:8]
 
-    temp_link = f"http://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user1}"
+    temp_link = f"https://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user1}"
     entry_url.insert(0, temp_link)
-    temp_message = f"http://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user2}"
+    temp_message = f"https://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user2}"
     Messgae = temp_message
 
     if Phone and Messgae:
