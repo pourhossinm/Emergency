@@ -6,11 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="088cd0cb-d990-41d5-bdb3-6f6bbc08ab91" name="Changes" comment="6-5-1404">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Emergency.db" beforeDir="false" afterPath="$PROJECT_DIR$/Emergency.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python.ino/ardiuno_modem_with_python.ino.ino" beforeDir="false" afterPath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python.ino/ardiuno_modem_with_python.ino.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python_call_sms/ardiuno_modem_with_python_call_sms.ino" beforeDir="false" afterPath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python_call_sms/ardiuno_modem_with_python_call_sms.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hex.py" beforeDir="false" afterPath="$PROJECT_DIR$/hex.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/chatroom.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chatroom.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/chatroom1.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
