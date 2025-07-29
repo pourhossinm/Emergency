@@ -4,8 +4,8 @@ SoftwareSerial sim800(3, 2); // RX, TX
 String inputString = "";
 
 void setup() {
-  Serial.begin(9600);      // ارتباط با پایتون
-  sim800.begin(9600);      // ارتباط با SIM800
+  Serial.begin(4800);      // ارتباط با پایتون
+  sim800.begin(4800);      // ارتباط با SIM800
   delay(2000);
 
   Serial.println("Ready");

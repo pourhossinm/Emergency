@@ -4,107 +4,102 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='chatroom.455css') }}">
-<style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        background-color: black;
-    }
 
-    #video_grid {
-        position: relative;
-        width: 100vw;
-        height: 85vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: black;
-    }
-
-    #div_local_vid {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        width: 240px;
-        height: 180px;
-        z-index: 2;
-        border: 2px solid white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 0 10px rgba(255,255,255,0.3);
-    }
-
-    video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    #control_box {
-        position: relative;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        z-index: 3;
-        padding: 10px 0;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
-<div class="heading mb-4 text-center text-white">
-    <h1 class="display-4">سامانه راهنمای تصویری اورژانس</h1>
-    <div class="room-info">
-        <h3>شماره تماس: <span class="heading-mark">{{room_id}}</span></h3>
-        <h4>نام اتاق گفتگو: <span class="heading-mark">{{user_id}}</span></h4>
-    </div>
-</div>
 
-<div class="container-fluid px-0 mx-0">
-    <div id="video_grid">
-        <!-- remote videos will be appended here by JavaScript -->
-    </div>
-    <div id="div_local_vid">
-        <div class="vid-wrapper">
-            <video id="local_vid" autoplay muted playsinline></video>
+    <div class="heading mb-4">
+        <h1 class="display-4">سامانه راهنمای تصویری اورژانس</h1>
+        <div class="room-info">
+            <h3>شماره تماس: <span class="heading-mark">{{room_id}}</span></h3>
+            <h4>نام اتاق گفتگو: <span class="heading-mark">{{user_id}}</span></h4>
         </div>
     </div>
 
-    <div id="control_box" class="row control-box shadow">
-        <div class="col-12 d-flex justify-content-center align-items-center button-box">
-            <button id="bttn_mute" class="btn btn-lg btn-outline-secondary rounded-circle mx-2">
-                <span id="mute_icon" class="material-icons pt-2">mic</span>
-            </button>
-            <button id="bttn_vid_mute" class="btn btn-lg btn-outline-secondary rounded-circle mx-2">
-                <span id="vid_mute_icon" class="material-icons pt-2">videocam</span>
-            </button>
-            <button id="call_end" class="btn btn-lg btn-danger rounded-circle mx-2">
-                <span class="material-icons pt-2">call_end</span>
-            </button>
+    <div class="container-fluid px-0 mx-0">
+        <div id="video_grid" class="video-grid"></div>
+                    <div id="div_local_vid" class="col-5 col-md-4 col-lg-3 video-item ml-auto">
+                <div class="vid-wrapper">
+                    <video id="local_vid" autoplay muted>jsdhfsjdf</video>
+                </div>
+                    </div>
+
+
+        <div id="control_box" class="row control-box shadow">
+            <div class="col-7 col-md-8 col-lg-9 d-flex justify-content-around align-items-center button-box">
+
+                <button id="bttn_mute" class="btn btn-lg btn-outline-secondary rounded-circle">
+                    <span id="mute_icon" class="material-icons pt-2">
+                        mic
+                    </span>
+                </button>
+                <button id="bttn_vid_mute"class="btn btn-lg btn-outline-secondary rounded-circle">
+                    <span id="vid_mute_icon" class="material-icons pt-2">
+                        videocam
+                    </span>
+                </button>
+                <button id="call_end" class="btn btn-lg btn-danger rounded-circle">
+                    <span class="material-icons pt-2">
+                        call_end
+                    </span>
+                </button>
+            </div>
         </div>
     </div>
-</div>
+
 {% endblock %}
 
 {% block extra_scripts %}
+<!-- socketio -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"
-    integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg=="
-    crossorigin="anonymous"></script>
+integrity="sha512-YeeA/Qxn5hYdkukScTCNNOhTrv1C2RubAGButJ1rmgQwZf/HdRaCGl+JAVkqsqaNRaYNHdheiuKKuPf9mDcqKg=="
+crossorigin="anonymous"></script>
+
+
+<!-- Latest compiled and minified CSS -->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
+<!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 <script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
+
+<!-- google Material icons -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- custom css -->
 <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='chatroom.css')}}">
+<!--    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.min.css')}}">-->
+
 
 <script type="text/javascript">
-    var myRoomID = "{{room_id}}";
-    var myUserID = "{{user_id}}";
-    var audioMuted = "{{mute_audio}}"=="1";
-    var videoMuted = "{{mute_video}}"=="1";
-    console.log(">> {{mute_audio}}, {{mute_video}}", audioMuted, videoMuted);
+var myRoomID = "{{room_id}}";
+var myUserID = "{{user_id}}";
+var audioMuted = "{{mute_audio}}"=="1";
+var videoMuted = "{{mute_video}}"=="1";
+console.log(">> {{mute_audio}}, {{mute_video}}", audioMuted, videoMuted);
 </script>
 <script src="{{url_for('static', filename='chatroom_ui.js')}}"></script>
 <script src="{{url_for('static', filename='chatroom_networking.js')}}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var videoElement = document.getElementById("local_vid");
+
+        if (videoElement) {
+            videoElement.addEventListener("play", function() {
+                setTimeout(function() {
+                    document.documentElement.style.scrollBehavior = "smooth"; // اسکرول نرم
+                    window.scrollTo(0, document.body.scrollHeight); // اسکرول به پایین صفحه
+                }, 500);
+            });
+        }
+    });
+
+</script>
+
 {% endblock %}

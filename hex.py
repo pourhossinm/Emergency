@@ -77,53 +77,43 @@ def connect_serial():
         messagebox.showwarning("هشدار", "لطفاً یک پورت را انتخاب کنید.")
 
 
-# تبدیل متن به UCS2 HEX
-def to_ucs2_hex(text):
-    return ''.join(f"{ord(c):04X}" for c in text)
-
-# تابع خواندن داده‌های سریال و نمایش در کنسول پایتون
-# def read_from_serial():
-#     while True:
-#         if ser.in_waiting > 0:
-#             serial_data = ser.readline().decode("utf-8").strip()
-#             messagebox.showinfo("آردینو",f"📡 آردوینو → {serial_data}")  # نمایش پیام‌های دریافتی
 
 def send_sms(phone, message):
-    # شروع خواندن سریال در یک ترد جداگانه (برای نمایش هم‌زمان پیام‌ها)
-    # threading.Thread(target=read_from_serial, daemon=True).start()
-
-    # phone_ucs2 = to_ucs2_hex(phone)
-    # text_ucs2 = to_ucs2_hex(message)
-
-    # data_to_send = f"{phone_ucs2},{text_ucs2}\n"
-    data_to_send = f"SMS:{phone}:{message}\n"  # فرمت مورد انتظار آردوینو
-    ser.write(data_to_send.encode("utf-8"))
-    # ser.write(data_to_send.encode())  # ارسال داده به آردوینو
-    messagebox.showinfo("ارسال پیام","🚀 پیام به آردوینو ارسال شد!")
-    cursor.execute("INSERT INTO Emergency (Phone, Message) VALUES (?, ?)", (phone, message))
-
-    conn.commit()
-    fetch_data()  # به‌روز‌رسانی جدول
-    entry_phone.delete(0, tk.END)
-    # entry_message.delete(0, tk.END)
-    messagebox.showinfo("ثبت موفق", "اطلاعات با موفقیت ذخیره شد!")
-    time.sleep(3)  # تاخیر بین ارسال‌ها
+    try:
+        data_to_send = f"SMS:{phone}:{message}\n"  # فرمت مورد انتظار آردوینو
+        ser.write(data_to_send.encode("utf-8"))
+        cursor.execute("INSERT INTO Emergency (Phone, Message) VALUES (?, ?)", (phone, message))
+        conn.commit()
+        fetch_data()  # به‌روز‌رسانی جدول
+        # entry_phone.delete(0, tk.END)
+        # entry_message.delete(0, tk.END)
+        messagebox.showinfo("ثبت موفق", "اطلاعات با موفقیت ذخیره شد!")
+        # time.sleep(3)  # تاخیر بین ارسال‌ها
+    except Exception as e:
+        print(tk.END, f"خطا در ارسال: {e}\n")
 
 
 def submit():
-    Phone = entry_phone.get()
-    uuid_user1 = str(uuid.uuid4())[:8]
-    uuid_user2 = str(uuid.uuid4())[:8]
+    try:
 
-    temp_link = f"https://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user1}"
-    entry_url.insert(0, temp_link)
-    temp_message = f"https://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user2}"
-    Messgae = temp_message
+        Phone = entry_phone.get()
+        uuid_user1 = str(uuid.uuid4())[:4]
+        uuid_user2 = str(uuid.uuid4())[:4]
 
-    if Phone and Messgae:
-        send_sms(Phone, Messgae)
-    else:
-        messagebox.showwarning("خطا!", "اطلاعات ورودی صحیح نیست!")
+        temp_link = f"https://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user1}"
+        entry_url.insert(0, temp_link)
+        temp_message = f"https://emergency-7a6k.onrender.com/room/{Phone}/{uuid_user2}"
+        Messgae = temp_message
+        print(Messgae)
+
+        if Phone and Messgae:
+            send_sms(Phone, Messgae)
+        else:
+            messagebox.showwarning("خطا!", "اطلاعات ورودی صحیح نیست!")
+    except Exception as e:
+
+        print(tk.END, f"خطا در ارسال: {e}\n")
+
 
 def open_url():
     """باز کردن آدرس داخل entry در مرورگر"""
@@ -146,6 +136,7 @@ def answer_call():
         print("Decoded:", line.decode(encoding))
 
     except Exception as e:
+
         print(tk.END, f"خطا در ارسال: {e}\n")
 
 def hangup_call():

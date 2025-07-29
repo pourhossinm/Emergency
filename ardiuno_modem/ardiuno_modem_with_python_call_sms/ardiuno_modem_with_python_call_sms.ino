@@ -72,6 +72,7 @@ void parseSMSCommand(String cmd) {
     smsText = cmd.substring(secondColon + 1);
 
     sendSMS(smsNumber, smsText);
+    Serial.println(">> دستور SMS دریافت شد: " + cmd);
   } else {
     Serial.println("⚠️ SMS format error. Use: SMS:number:text");
   }
@@ -91,7 +92,9 @@ void sendSMS(String number, String text) {
   delay(200);
 
   sim800.write(26); // CTRL+Z
-  delay(3000);
+  delay(5000);
 
   Serial.println("✅ SMS sent to " + number);
+
+
 }
