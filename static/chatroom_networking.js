@@ -3,7 +3,7 @@ var _peer_list = {};
 
 // socketio
 var protocol = window.location.protocol;
-var socket = io(protocol + '//' + document.domain + ':' + location.port, {autoConnect: false});
+var socket = io(window.location.origin, { autoConnect: false });
 
 document.addEventListener("DOMContentLoaded", (event)=>{
     startCamera();
@@ -230,7 +230,7 @@ function handleICECandidateEvent(event, peer_id)
 function handleNewICECandidateMsg(msg)
 {
 
-    console.log(`ICE candidate recieved from <${peer_id}>`);
+    console.log(`ICE candidate recieved from <${msg["sender_id"]}>`);
     var candidate = new RTCIceCandidate(msg.candidate);
     _peer_list[msg["sender_id"]].addIceCandidate(candidate)
     .catch(log_error);

@@ -169,12 +169,28 @@ def on_data(data):
     print(data)
     sender_sid = data['sender_id']
     target_sid = data['target_id']
-    if sender_sid != request.sid:
-        print("[Not supposed to happen!] request.sid and sender_id don't match!!!")
 
-    if data["type"] != "new-ice-candidate":
-        print('{} message from {} to {}'.format(data["type"], sender_sid, target_sid))
+    # بررسی معتبر بودن ارتباط فرستنده
+    if sender_sid != request.sid:
+        print("[WARNING] sender_id and actual request.sid don't match!")
+        return
+
+    # بررسی وجود target در لیست کاربران فعلی
+    if target_sid not in _room_of_sid:
+        print(f"[ERROR] target_sid {target_sid} not connected. Dropping message.")
+        return
+
+    # بررسی اینکه target در همان اتاق است
+    sender_room = _room_of_sid.get(sender_sid)
+    target_room = _room_of_sid.get(target_sid)
+
+    if sender_room != target_room:
+        print(f"[WARNING] sender and target not in same room: {sender_room} ≠ {target_room}")
+        return
+
+    # ارسال پیام به target
     socketio.emit('data', data, room=target_sid)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
