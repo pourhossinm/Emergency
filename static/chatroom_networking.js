@@ -3,9 +3,8 @@ var _peer_list = {};
 
 // socketio
 var protocol = window.location.protocol;
-const protocol = window.location.protocol;
-const host = window.location.host;
-const socket = io(`${protocol}//${host}`, { path: "/socket.io", autoConnect: false });
+
+var socket = io(window.location.origin, { path: "/socket.io", autoConnect: false });
 
 
 document.addEventListener("DOMContentLoaded", (event)=>{
