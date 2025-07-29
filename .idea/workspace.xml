@@ -7,10 +7,6 @@
     <list default="true" id="088cd0cb-d990-41d5-bdb3-6f6bbc08ab91" name="Changes" comment="6-5-1404">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Emergency.db" beforeDir="false" afterPath="$PROJECT_DIR$/Emergency.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat_rooms.db" beforeDir="false" afterPath="$PROJECT_DIR$/chat_rooms.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hex.py" beforeDir="false" afterPath="$PROJECT_DIR$/hex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/chatroom_checkpoint.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chatroom_checkpoint.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
