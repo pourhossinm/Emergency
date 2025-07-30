@@ -1,4 +1,3 @@
-var myVideo;
 
 document.addEventListener("DOMContentLoaded", (event)=>{
     myVideo = document.getElementById("local_vid");
