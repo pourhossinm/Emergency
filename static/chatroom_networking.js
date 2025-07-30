@@ -21,6 +21,8 @@ var mediaConstraints = {
 
 function startCamera()
 {
+    const myVideo = document.getElementById("local_vid");  // تعریف داخل تابع
+
     navigator.mediaDevices.getUserMedia(mediaConstraints)
     .then((stream)=>{
         myVideo.srcObject = stream;
@@ -28,7 +30,6 @@ function startCamera()
         setAudioMuteState(audioMuted);
         setVideoMuteState(videoMuted);
         //start the socketio connection
-
         socket.connect();
     })
     .catch((e)=>{
@@ -36,8 +37,6 @@ function startCamera()
         alert("Error! Unable to access camera or mic! ");
     });
 }
-
-
 
 
 socket.on("connect", ()=>{
