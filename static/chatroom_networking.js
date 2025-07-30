@@ -21,7 +21,7 @@ var mediaConstraints = {
 
 function startCamera()
 {
-//    const myVideo = document.getElementById("local_vid");  // تعریف داخل تابع
+    const myVideo = document.getElementById("local_vid");  // تعریف داخل تابع
 
     navigator.mediaDevices.getUserMedia(mediaConstraints)
     .then((stream)=>{
