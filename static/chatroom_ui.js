@@ -136,32 +136,41 @@ function addVideoElement(element_id, display_name) {
     document.getElementById("remote_videos").appendChild(makeVideoElement(element_id, display_name));
 }
 
-document.getElementById("send_location_btn").addEventListener("click", () => {
+document.getElementById("bttn_location").addEventListener("click", () => {
     if (!navigator.geolocation) {
-        alert("مرورگر شما از موقعیت‌یابی پشتیبانی نمی‌کند.");
+        alert("مرورگر شما از مکان‌یابی پشتیبانی نمی‌کند.");
         return;
     }
 
     navigator.geolocation.getCurrentPosition(
         (position) => {
-            const locationData = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            socket.emit("send_location", locationData); // ارسال به سرور
-            alert("test")
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            socket.emit("send_location", {
+                latitude,
+                longitude
+            });
         },
         () => {
-            alert("دریافت موقعیت با خطا مواجه شد.");
+            alert("عدم توانایی در دریافت موقعیت مکانی.");
         }
     );
 });
 
 
+
 socket.on("receive_location", (data) => {
-    const link = `https://www.google.com/maps?q=${data.lat},${data.lng}`;
-    const msgBox = document.createElement("p");
-    msgBox.innerHTML = `<a href="${link}" target="_blank">📍 موقعیت طرف مقابل</a>`;
-    document.getElementById("chat_messages").appendChild(msgBox); // فرض بر این که چت‌ت اینجاست
+    const { latitude, longitude } = data;
+
+    const locationLink = document.createElement("a");
+    locationLink.href = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    locationLink.target = "_blank";
+    locationLink.textContent = "موقعیت مکانی طرف مقابل را ببینید";
+    locationLink.className = "d-block my-2 text-primary";
+
+    // نمایش در جایی مناسب مثل یک چت‌باکس یا پیام‌ها
+    const messagesBox = document.getElementById("messages") || document.body;
+    messagesBox.appendChild(locationLink);
 });
 

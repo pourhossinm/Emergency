@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="088cd0cb-d990-41d5-bdb3-6f6bbc08ab91" name="Changes" comment="6-5-1404">
       <change beforePath="$PROJECT_DIR$/static/chatroom_ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/chatroom_ui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/chatroom.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chatroom.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
