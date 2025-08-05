@@ -200,12 +200,11 @@ def on_data(data):
     # ارسال پیام به target
     socketio.emit('data', data, room=target_sid)
 
-@socketio.on("send_location")
-def handle_location(data):
-    room = user_room_mapping.get(request.sid)
-    print(room)
-    if room:
-        emit("receive_location", data, room=room, include_self=False)
+@socketio.on('send_location')
+def handle_send_location(data):
+    print('موقعیت دریافتی از فرستنده:', data)
+    # فرض: 'room' مشخصه اتاق مشترک دو کاربره
+    emit('receive_location', data, room=data['room'], include_self=False)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
