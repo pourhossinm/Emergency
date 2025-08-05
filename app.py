@@ -203,6 +203,7 @@ def on_data(data):
 @socketio.on("send_location")
 def handle_location(data):
     room = user_room_mapping.get(request.sid)
+    print(room)
     if room:
         emit("receive_location", data, room=room, include_self=False)
 
