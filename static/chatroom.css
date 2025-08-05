@@ -134,21 +134,21 @@ body, html {
 
 
 .remote-video-area {
+    position: relative;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 100px); /* اگر منو بالا دارید این را تنظیم کن */
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
+    background-color: #000;
 }
 
 .remote-video-area video {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #333;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* یا contain اگر بریده نشود */
 }
+
 
 .local-video-area {
     position: absolute;
