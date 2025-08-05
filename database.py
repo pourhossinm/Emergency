@@ -19,14 +19,14 @@ def create_tables():
 
 
 def add_closed_room(room_id):
-    """ ذخیره نام اتاق بسته‌شده در دیتابیس """
-    conn = sqlite3.connect(DB_NAME)
-    cursor = conn.cursor()
-
-    cursor.execute("INSERT INTO closed_rooms (room_id) VALUES (?)", (room_id,))
-    conn.commit()
-    conn.close()
-
+    # """ ذخیره نام اتاق بسته‌شده در دیتابیس """
+    # conn = sqlite3.connect(DB_NAME)
+    # cursor = conn.cursor()
+    #
+    # cursor.execute("INSERT INTO closed_rooms (room_id) VALUES (?)", (room_id,))
+    # conn.commit()
+    # conn.close()
+    pass
 
 def is_room_closed(room_id):
     """ بررسی اینکه آیا این اتاق در دیتابیس بسته‌شده است یا خیر """

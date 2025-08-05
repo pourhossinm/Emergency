@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()
 
 from database import create_tables, add_closed_room, is_room_closed
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
@@ -9,12 +11,14 @@ import os
 import uuid
 
 
+
 Payload.max_decode_packets = 200
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "thisismys3cr3tk3y"
 
-socketio = SocketIO(app, cors_allowed_origins="*")
+# socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, async_mode='eventlet')
 
 
 _users_in_room = {} # stores room wise user list
@@ -68,6 +72,7 @@ def enter_room(room_id, user_id):
 
     session[room_id] = {"name": user_id, "mute_audio": 0, "mute_video": 0}
     return render_template("chatroom.html", room_id=room_id, user_id=user_id)
+
 
 @app.route("/room/<string:room_id>/checkpoint/", methods=["GET", "POST"])
 def entry_checkpoint(room_id):
@@ -169,14 +174,37 @@ def on_data(data):
     print(data)
     sender_sid = data['sender_id']
     target_sid = data['target_id']
-    if sender_sid != request.sid:
-        print("[Not supposed to happen!] request.sid and sender_id don't match!!!")
 
-    if data["type"] != "new-ice-candidate":
-        print('{} message from {} to {}'.format(data["type"], sender_sid, target_sid))
+    # بررسی معتبر بودن ارتباط فرستنده
+    if sender_sid != request.sid:
+        print("[WARNING] sender_id and actual request.sid don't match!")
+        return
+
+    # بررسی وجود target در لیست کاربران فعلی
+    if target_sid not in _room_of_sid:
+        print(f"[ERROR] target_sid {target_sid} not connected. Dropping message.")
+        return
+
+    # بررسی اینکه target در همان اتاق است
+    sender_room = _room_of_sid.get(sender_sid)
+    target_room = _room_of_sid.get(target_sid)
+
+    if sender_room != target_room:
+        print(f"[WARNING] sender and target not in same room: {sender_room} ≠ {target_room}")
+        return
+
+    # ارسال پیام به target
     socketio.emit('data', data, room=target_sid)
 
+@socketio.on("send_location")
+def handle_location(data):
+    room = user_room_mapping.get(request.sid)  # باید سیستم رومی که استفاده می‌کنی مشخص باشه
+    emit("receive_location", data, room=room, include_self=False)
+
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
-    socketio.run(app, host='0.0.0.0', port=port)
-    # socketio.run(app, debug=True)
+    # port = int(os.environ.get("PORT", 5000))  # تنظیم پورت مناسب
+    # socketio.run(app, host='0.0.0.0', port=port)
+    # # socketio.run(app, debug=True)
+
+    port = int(os.environ.get("PORT", 5000))
+    socketio.run(app, host='127.0.0.1', port=port, debug=True)

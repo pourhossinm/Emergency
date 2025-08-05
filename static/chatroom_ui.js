@@ -1,5 +1,3 @@
-var myVideo;
-
 document.addEventListener("DOMContentLoaded", (event)=>{
     myVideo = document.getElementById("local_vid");
     myVideo.onloadeddata = ()=>{console.log("W,H: ", myVideo.videoWidth, ", ", myVideo.videoHeight);};
@@ -111,3 +109,58 @@ function setVideoMuteState(flag)
     // switch button icon
     document.getElementById("vid_mute_icon").innerText = (flag)? "videocam_off": "videocam";
 }
+
+function makeVideoElement(element_id, display_name) {
+    let wrapper_div = document.createElement("div");
+    let vid = document.createElement("video");
+    let name_text = document.createElement("div");
+
+    wrapper_div.id = "div_" + element_id;
+    vid.id = "vid_" + element_id;
+
+    vid.autoplay = true;
+    vid.playsInline = true;
+
+    wrapper_div.className = "remote-video-item";
+    vid.className = "remote-video";
+    name_text.className = "display-name";
+    name_text.innerText = display_name;
+
+    wrapper_div.appendChild(vid);
+    wrapper_div.appendChild(name_text);
+
+    return wrapper_div;
+}
+
+function addVideoElement(element_id, display_name) {
+    document.getElementById("remote_videos").appendChild(makeVideoElement(element_id, display_name));
+}
+
+document.getElementById("send_location_btn").addEventListener("click", () => {
+    if (!navigator.geolocation) {
+        alert("مرورگر شما از موقعیت‌یابی پشتیبانی نمی‌کند.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const locationData = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            socket.emit("send_location", locationData); // ارسال به سرور
+        },
+        () => {
+            alert("دریافت موقعیت با خطا مواجه شد.");
+        }
+    );
+});
+
+
+socket.on("receive_location", (data) => {
+    const link = `https://www.google.com/maps?q=${data.lat},${data.lng}`;
+    const msgBox = document.createElement("p");
+    msgBox.innerHTML = `<a href="${link}" target="_blank">📍 موقعیت طرف مقابل</a>`;
+    document.getElementById("chat_messages").appendChild(msgBox); // فرض بر این که چت‌ت اینجاست
+});
+

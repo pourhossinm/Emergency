@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", (event)=>{
     var muteVideoField = document.getElementById("mute_video_inp");
     var muteBttn = document.getElementById("bttn_mute");
     var muteVidBttn = document.getElementById("bttn_vid_mute");
+    alert("23");
     var myVideo = document.getElementById("local_vid");
 
     muteBttn.addEventListener("click", (event)=>{
