@@ -5,40 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="088cd0cb-d990-41d5-bdb3-6f6bbc08ab91" name="Changes" comment="6-5-1404">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python_call_sms/ardiuno_modem_with_python_call_sms.ino" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python_ino5/ardiuno_modem_with_python_ino5.ino" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python_ino_3/ardiuno_modem_with_python_ino_3.ino" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python_ino_4/ardiuno_modem_with_python_ino_4.ino" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ardiuno_modem/test_serial/test_serial.ino" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/formtest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/bootstrap.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/chatroom1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Emrgence Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Emrgence Project.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Emergency.db" beforeDir="false" afterPath="$PROJECT_DIR$/Emergency.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem.ino" beforeDir="false" afterPath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python.ino/ardiuno_modem_with_python.ino.ino" beforeDir="false" afterPath="$PROJECT_DIR$/ardiuno_modem/ardiuno_modem_with_python.ino/ardiuno_modem_with_python.ino.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ardiuno_modem/test_connect/test_connect.ino" beforeDir="false" afterPath="$PROJECT_DIR$/ardiuno_modem/test_connect/test_connect.ino" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat_rooms.db" beforeDir="false" afterPath="$PROJECT_DIR$/chat_rooms.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hex.py" beforeDir="false" afterPath="$PROJECT_DIR$/hex.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/chatroom.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/chatroom.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/chatroom_checkpoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/chatroom_checkpoint.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/chatroom_networking.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/chatroom_networking.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/chatroom_ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/chatroom_ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/sidebar.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/sidebar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/sidebar.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/sidebar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/temp.html" beforeDir="false" afterPath="$PROJECT_DIR$/static/temp.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/chatroom.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chatroom.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/chatroom_checkpoint.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/chatroom_checkpoint.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +57,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "ToolWindow.Version Control.ShowToolbar": "false",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "E:/project/arduino/Emrgence Project",
     "settings.editor.selected.configurable": "vcs.Git"
   }
