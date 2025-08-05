@@ -1,13 +1,29 @@
 
-.video-grid
-{  
-    display: grid;
-    grid-auto-flow: dense; 
-    grid-template-columns: auto auto; 
-    gap: 1rem;    
-    padding: 0.5rem;
-    margin: 0.8rem;
+
+/* تنظیم ارتفاع محتوا */
+.container-fluid {
+    min-height: 100vh; /* اطمینان از داشتن فضای کافی برای اسکرول */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
+
+/* تنظیم ویدیو برای نمایش صحیح */
+.video-grid {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* اطمینان از اینکه دکمه‌های کنترلی در پایین باشند */
+.control-box {
+    margin-top: auto;
+    padding-bottom: 20px;
+}
+
+
 
 .video-grid:empty{
     display: block;

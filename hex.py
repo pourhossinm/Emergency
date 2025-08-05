@@ -3,6 +3,7 @@ import time
 import threading
 import tkinter as tk
 from tkinter import messagebox, ttk
+
 import sqlite3
 import webbrowser
 import uuid
@@ -54,7 +55,6 @@ def send_sms(phone, message):
     # شروع خواندن سریال در یک ترد جداگانه (برای نمایش هم‌زمان پیام‌ها)
     # threading.Thread(target=read_from_serial, daemon=True).start()
 
-    print(message)
     phone_ucs2 = to_ucs2_hex(phone)
     text_ucs2 = to_ucs2_hex(message)
 
