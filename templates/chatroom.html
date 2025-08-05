@@ -15,15 +15,15 @@
     </div>
 </div>
 
-<div class="container-fluid px-0 mx-0">
-    <div id="video_grid" class="video-grid"></div>
+<div class="video-container">
+    <!-- Remote videos will be inserted dynamically here -->
+    <div id="remote_videos" class="remote-video-area"></div>
 
-    <!-- ویدیوی خود کاربر (Local) -->
-    <div id="div_local_vid" class="video-item-local">
-        <div class="vid-wrapper">
-            <video id="local_vid" autoplay muted></video>
-        </div>
+    <!-- Local video -->
+    <div id="local_video_wrapper" class="local-video-area">
+        <video id="local_vid" autoplay muted></video>
     </div>
+</div>
 
     <!-- کنترل‌ها -->
     <div id="control_box" class="row control-box shadow">

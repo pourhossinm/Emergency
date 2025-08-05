@@ -110,3 +110,29 @@ function setVideoMuteState(flag)
     // switch button icon
     document.getElementById("vid_mute_icon").innerText = (flag)? "videocam_off": "videocam";
 }
+
+function makeVideoElement(element_id, display_name) {
+    let wrapper_div = document.createElement("div");
+    let vid = document.createElement("video");
+    let name_text = document.createElement("div");
+
+    wrapper_div.id = "div_" + element_id;
+    vid.id = "vid_" + element_id;
+
+    vid.autoplay = true;
+    vid.playsInline = true;
+
+    wrapper_div.className = "remote-video-item";
+    vid.className = "remote-video";
+    name_text.className = "display-name";
+    name_text.innerText = display_name;
+
+    wrapper_div.appendChild(vid);
+    wrapper_div.appendChild(name_text);
+
+    return wrapper_div;
+}
+
+function addVideoElement(element_id, display_name) {
+    document.getElementById("remote_videos").appendChild(makeVideoElement(element_id, display_name));
+}
