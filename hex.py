@@ -33,12 +33,29 @@ CREATE TABLE IF NOT EXISTS Emergency (
 conn.commit()
 
 
+def on_row_double_click(event):
+    selected_item = tree.focus()  # گرفتن آیتم انتخاب‌شده
+    if not selected_item:
+        return
+
+    item_values = tree.item(selected_item, "values")  # گرفتن مقادیر هر ستون
+    if len(item_values) >= 3:
+        # caller_id.delete(0, tk.END)
+        caller_id.config(text= item_values[0])
+
+        entry_phone.delete(0, tk.END)
+        entry_phone.insert(0, item_values[1])
+
+        entry_url.delete(0, tk.END)
+        entry_url.insert(0, item_values[2])
+
+
 def fetch_data():
     """دریافت اطلاعات از دیتابیس و نمایش در جدول"""
     for row in tree.get_children():
         tree.delete(row)  # پاک کردن اطلاعات قبلی جدول
 
-    cursor.execute("SELECT  Phone, Message FROM Emergency")
+    cursor.execute("SELECT  id, Phone, Message FROM Emergency order by id DESC")
     rows = cursor.fetchall()
     for row in rows:
         tree.insert("", "end", values=row)
@@ -147,6 +164,16 @@ def hangup_call():
     except Exception as e:
         print(tk.END, f"خطا در ارسال: {e}\n")
 
+def del_room():
+    try:
+        print(caller_id.cget("text"))
+        cursor.execute("INSERT INTO chatrooms (room_id) VALUES (?)", (caller_id.cget("text")))
+        conn.commit()
+    except:
+        pass
+
+
+
 def read_serial():
     try:
         while True:
@@ -168,51 +195,62 @@ if __name__ == "__main__":
     root.title("فرم دریافت اطلاعات")
     root.geometry("800x600")
 
-    tk.Label(root, text="انتخاب پورت COM:").pack(pady=10)
+    # پیکربندی ستون‌ها برای چینش بهتر
+    root.columnconfigure(0, weight=1)
+    root.columnconfigure(1, weight=1)
 
-    # کمبوباکس پورت‌ها
+    # لیبل و کمبوباکس پورت
+    tk.Label(root, text="انتخاب پورت COM:").grid(row=0, column=1, pady=10, sticky="e")
     ports = list_serial_ports()
-    port_combo = ttk.Combobox(root, values=ports, state="readonly")
-    port_combo.pack()
+    port_combo = ttk.Combobox(root, values=ports, state="readonly", justify="right")
+    port_combo.grid(row=0, column=0, pady=10, sticky="w")
 
     # دکمه اتصال
     connect_button = tk.Button(root, text="اتصال", command=connect_serial)
-    connect_button.pack(pady=20)
+    connect_button.grid(row=1, column=0, columnspan=2, pady=10)
 
-
+    # لیبل وضعیت تماس
     caller_label = tk.Label(root, text="در انتظار اتصال ...", font=('Arial', 14))
-    caller_label.pack(pady=10)
+    caller_label.grid(row=2, column=0, columnspan=2, pady=10)
 
-    tk.Label(root, text="شماره تماس:").pack(pady=5)
-    entry_phone = tk.Entry(root)
-    entry_phone.pack(pady=5)
+    # لیبل و ورودی شماره تماس
+    tk.Label(root, text="شماره تماس:").grid(row=3, column=1, sticky="e")
+    entry_phone = tk.Entry(root, justify="right")
+    entry_phone.grid(row=3, column=0, pady=5, sticky="w")
+
+    # لیبل کد تماس‌گیرنده
+    caller_id = tk.Label(root, text="کد", font=('Arial', 8), justify="right")
+    caller_id.grid(row=4, column=0, columnspan=2, pady=5)
 
     # لیبل و ورودی آدرس وب
-    tk.Label(root, text= "آدرس وب:").pack(pady=5)
-    entry_url = tk.Entry(root, width=60)
-    entry_url.pack(pady=5)
+    tk.Label(root, text="آدرس وب:").grid(row=5, column=1, sticky="e")
+    entry_url = tk.Entry(root, width=60, justify="right")
+    entry_url.grid(row=5, column=0, pady=5, sticky="w")
 
-    # دکمه باز کردن لینک در مرورگر
+    # دکمه‌ها
     btn_open_url = tk.Button(root, text="باز کردن لینک", command=open_url)
-    btn_open_url.pack(pady=10)
+    btn_open_url.grid(row=6, column=0, columnspan=2, pady=5)
 
     btn_submit = tk.Button(root, text="ارسال پیام", command=submit)
-    btn_submit.pack(pady=5)
+    btn_submit.grid(row=6, column=1, columnspan=2, pady=5)
 
     btn_response = tk.Button(root, text="پاسخ تماس", command=answer_call)
-    btn_response.pack(pady=5)
+    btn_response.grid(row=7, column=0, columnspan=2, pady=5)
 
     btn_hangup = tk.Button(root, text="قطع تماس", command=hangup_call)
-    btn_hangup.pack(pady=5)
+    btn_hangup.grid(row=7, column=1, columnspan=2, pady=5)
 
 
-    # نمایش جدول (Treeview)
-    columns = ( "شماره تماس", "پیام")
+    # جدول نمایش اطلاعات
+    columns = ("کد", "شماره تماس", "پیام")
     tree = ttk.Treeview(root, columns=columns, show="headings")
+    tree.heading("کد", text="کد")
     tree.heading("شماره تماس", text="شماره تماس")
     tree.heading("پیام", text="پیام")
+    tree.grid(row=8, column=0, columnspan=2, pady=10, sticky="nsew")
 
-    tree.pack(pady=10, fill=tk.BOTH, expand=True)
+    # اتصال دوبار کلیک به جدول
+    tree.bind("<Double-1>", on_row_double_click)
 
     fetch_data()
 
@@ -224,7 +262,10 @@ if __name__ == "__main__":
 
     root.mainloop()
     conn.close()
-    ser.close()
+    try:
+        ser.close()
+    except:
+        print("exit")
 
 
 
