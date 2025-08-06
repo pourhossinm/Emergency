@@ -147,6 +147,7 @@ document.getElementById("send_location_btn").addEventListener("click", () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude
         };
+        alert("send");
         socket.emit("send_location", locationData); // ارسال به سرور
     }, () => {
         alert("دریافت موقعیت با خطا مواجه شد.");
@@ -157,6 +158,7 @@ document.getElementById("send_location_btn").addEventListener("click", () => {
 
 
 socket.on("receive_location", (data) => {
+    alert("recive");
     const link = `https://www.google.com/maps?q=${data.lat},${data.lng}`;
     const msgBox = document.createElement("p");
     msgBox.innerHTML = `<a href="${link}" target="_blank">📍 موقعیت طرف مقابل</a>`;
