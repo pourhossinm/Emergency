@@ -164,15 +164,6 @@ def hangup_call():
     except Exception as e:
         print(tk.END, f"خطا در ارسال: {e}\n")
 
-def del_room():
-    try:
-        print(caller_id.cget("text"))
-        cursor.execute("INSERT INTO chatrooms (room_id) VALUES (?)", (caller_id.cget("text")))
-        conn.commit()
-    except:
-        pass
-
-
 
 def read_serial():
     try:

@@ -26,6 +26,8 @@ _room_of_sid = {} # stores room joined by an used
 _name_of_sid = {} # stores display name of users
 
 _room_owner = {}  # ذخیره user1_id برای هر اتاق
+user_room_mapping = {}  # نگاشت SID به Room برای ارسال موقعیت
+
 create_tables()
 @app.route("/create-room/", methods=["GET"])
 def create_room():
@@ -104,6 +106,7 @@ def on_join_room(data):
     # register sid to the room
     join_room(room_id)
     _room_of_sid[sid] = room_id
+    user_room_mapping[sid] = room_id
     _name_of_sid[sid] = display_name
 
     # broadcast to others in the room
@@ -166,6 +169,7 @@ def on_disconnect():
 
     _room_of_sid.pop(sid, None)
     _name_of_sid.pop(sid, None)
+    user_room_mapping.pop(sid, None)
 
     print("\nActive rooms: ", _users_in_room, "\n")
 
@@ -196,15 +200,16 @@ def on_data(data):
     # ارسال پیام به target
     socketio.emit('data', data, room=target_sid)
 
-@socketio.on("send_location")
-def handle_location(data):
-    room = user_room_mapping.get(request.sid)  # باید سیستم رومی که استفاده می‌کنی مشخص باشه
-    emit("receive_location", data, room=room, include_self=False)
+@socketio.on('send_location')
+def handle_send_location(data):
+    print('موقعیت دریافتی از فرستنده:', data)
+    # فرض: 'room' مشخصه اتاق مشترک دو کاربره
+    emit('receive_location', data, room=data['room'], include_self=False)
 
 if __name__ == '__main__':
-    # port = int(os.environ.get("PORT", 5000))  # تنظیم پورت مناسب
-    # socketio.run(app, host='0.0.0.0', port=port)
-    # # socketio.run(app, debug=True)
+    port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
+    socketio.run(app, host='0.0.0.0', port=port)
+    # socketio.run(app, debug=True)
 
-    port = int(os.environ.get("PORT", 5000))
-    socketio.run(app, host='127.0.0.1', port=port, debug=True)
+    # port = int(os.environ.get("PORT", 5000))
+    # socketio.run(app, host='127.0.0.1', port=port, debug=True)
