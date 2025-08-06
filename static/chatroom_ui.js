@@ -151,6 +151,7 @@ document.getElementById("sendLocationBtn").addEventListener("click", () => {
             };
             socket.emit("send_location", data);
             console.log("📤 موقعیت ارسال شد:", data);
+            alert("test");
         },
         (error) => {
             alert("❌ دریافت موقعیت مکانی با خطا مواجه شد.");
