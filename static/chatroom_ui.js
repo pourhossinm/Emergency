@@ -151,7 +151,7 @@ document.getElementById("bttn_location").addEventListener("click", () => {
             };
                         alert("test2");
 
-            socket.emit("send_location", data);
+            socket.emit("bttn_location", data);
             console.log("📤 موقعیت ارسال شد:", data);
         },
         (error) => {
