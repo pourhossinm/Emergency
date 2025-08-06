@@ -148,7 +148,7 @@ document.getElementById("send_location_btn").addEventListener("click", () => {
             lng: position.coords.longitude
         };
         socket.emit("send_location", locationData); // ارسال به سرور
-        alert("send");
+        alert(locationData);
 
     }, () => {
         alert("دریافت موقعیت با خطا مواجه شد.");
