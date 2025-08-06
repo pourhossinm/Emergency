@@ -174,3 +174,6 @@ socket.on("receive_location", (data) => {
     messagesBox.appendChild(locationLink);
 });
 
+socket.on("location_debug", (data) => {
+    alert(data.message);
+});
