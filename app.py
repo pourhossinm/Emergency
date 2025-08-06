@@ -203,6 +203,9 @@ def on_data(data):
 @socketio.on("send_location")
 def handle_location(data):
     room = user_room_mapping.get(request.sid)  # باید سیستم رومی که استفاده می‌کنی مشخص باشه
+
+    emit("location_debug", {"room": room}, room=request.sid)
+
     emit("receive_location", data, room=room, include_self=False)
 
 
