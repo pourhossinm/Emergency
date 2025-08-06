@@ -141,7 +141,6 @@ document.getElementById("bttn_location").addEventListener("click", () => {
         alert("مرورگر شما از موقعیت مکانی پشتیبانی نمی‌کند.");
         return;
     }
-            alert("test");
 
     navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -150,6 +149,8 @@ document.getElementById("bttn_location").addEventListener("click", () => {
                 longitude: position.coords.longitude,
                 room: currentRoom  // یا هر نام متغیر صحیحی که دارید
             };
+                        alert("test2");
+
             socket.emit("send_location", data);
             console.log("📤 موقعیت ارسال شد:", data);
         },
