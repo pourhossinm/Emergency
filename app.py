@@ -200,7 +200,7 @@ def on_data(data):
     # ارسال پیام به target
     socketio.emit('data', data, room=target_sid)
 
-@socketio.on('send_location')
+@socketio.on('bttn_location')
 def handle_send_location(data):
     latitude = data.get('latitude')
     longitude = data.get('longitude')

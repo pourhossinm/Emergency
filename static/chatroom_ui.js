@@ -136,7 +136,7 @@ function addVideoElement(element_id, display_name) {
     document.getElementById("remote_videos").appendChild(makeVideoElement(element_id, display_name));
 }
 
-document.getElementById("sendLocationBtn").addEventListener("click", () => {
+document.getElementById("bttn_location").addEventListener("click", () => {
     if (!navigator.geolocation) {
         alert("مرورگر شما از موقعیت مکانی پشتیبانی نمی‌کند.");
         return;
