@@ -136,24 +136,25 @@ function addVideoElement(element_id, display_name) {
     document.getElementById("remote_videos").appendChild(makeVideoElement(element_id, display_name));
 }
 
-document.getElementById("bttn_location").addEventListener("click", () => {
+document.getElementById("sendLocationBtn").addEventListener("click", () => {
     if (!navigator.geolocation) {
-        alert("مرورگر شما از مکان‌یابی پشتیبانی نمی‌کند.");
+        alert("مرورگر شما از موقعیت مکانی پشتیبانی نمی‌کند.");
         return;
     }
 
     navigator.geolocation.getCurrentPosition(
         (position) => {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            socket.emit("send_location", {
-                latitude,
-                longitude
-            });
+            const data = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                room: currentRoom  // یا هر نام متغیر صحیحی که دارید
+            };
+            socket.emit("send_location", data);
+            console.log("📤 موقعیت ارسال شد:", data);
         },
-        () => {
-            alert("عدم توانایی در دریافت موقعیت مکانی.");
+        (error) => {
+            alert("❌ دریافت موقعیت مکانی با خطا مواجه شد.");
+            console.error(error);
         }
     );
 });
