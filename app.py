@@ -200,21 +200,11 @@ def on_data(data):
     # ارسال پیام به target
     socketio.emit('data', data, room=target_sid)
 
-@socketio.on('bttn_location')
-def handle_send_location(data):
-    latitude = data.get('latitude')
-    longitude = data.get('longitude')
-    room = data.get('room')
+@socketio.on("send_location")
+def handle_location(data):
+    room = user_room_mapping.get(request.sid)  # باید سیستم رومی که استفاده می‌کنی مشخص باشه
+    emit("receive_location", data, room=room, include_self=False)
 
-    if latitude is None or longitude is None:
-        emit('location_debug', {'message': '⚠️ مختصات ناقص دریافت شد.'}, to=request.sid)
-        return
-
-    msg = f"📍 لوکیشن دریافت شد: lat={latitude}, lon={longitude}, room={room}"
-    emit('location_debug', {'message': msg}, to=request.sid)
-
-    # ارسال لوکیشن به دیگران
-    emit('receive_location', data, room=room, include_self=False)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
