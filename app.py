@@ -175,7 +175,6 @@ def on_disconnect():
 
 @socketio.on("data")
 def on_data(data):
-    print(data)
     sender_sid = data['sender_id']
     target_sid = data['target_id']
 
@@ -202,17 +201,19 @@ def on_data(data):
 
 @socketio.on("send_location")
 def handle_location(data):
-    room = user_room_mapping.get(request.sid)  # باید سیستم رومی که استفاده می‌کنی مشخص باشه
 
-    emit("location_debug", {"room": room}, room=request.sid)
+    room = user_room_mapping.get(request.sid)  # باید سیستم رومی که استفاده می‌کنی مشخص باشه
+    print(room)
+
+    # emit("location_debug", {"room": room})
 
     emit("receive_location", data, room=room, include_self=False)
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
-    socketio.run(app, host='0.0.0.0', port=port)
-    # socketio.run(app, debug=True)
+    # port = int(os.environ.get("PORT", 10000))  # تنظیم پورت مناسب
+    # socketio.run(app, host='0.0.0.0', port=port)
+    # # socketio.run(app, debug=True)
 
-    # port = int(os.environ.get("PORT", 5000))
-    # socketio.run(app, host='127.0.0.1', port=port, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    socketio.run(app, host='127.0.0.1', port=port, debug=True)

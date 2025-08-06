@@ -249,3 +249,15 @@ function handleTrackEvent(event, peer_id)
     }
 }
 
+socket.on("receive_location", (data) => {
+    alert("recive");
+    const link = `https://www.google.com/maps?q=${data.lat},${data.lng}`;
+    const msgBox = document.createElement("p");
+    msgBox.innerHTML = `<a href="${link}" target="_blank">📍 موقعیت طرف مقابل</a>`;
+    document.getElementById("chat_messages").appendChild(msgBox); // فرض بر این که چت‌ت اینجاست
+});
+
+socket.on("location_debug", (data) => {
+    alert(data.message);
+});
+
